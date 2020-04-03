@@ -91,10 +91,11 @@ rankcols<- c("High"="grey70", "Low"="white")
 #CARBON
 C2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=C, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
-  scale_fill_manual(values=rankcols, name="Predicted rank")+
-  labs(y="Measured % C", x="Predicted Nutritional Rank", title="A")+
+  scale_fill_manual(values=rankcols, guide=FALSE)+
+  labs(y="Measured % C", title="A")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title=element_text(size=14),
+        axis.title.y=element_text(size=14),
+        axis.title.x=element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
@@ -104,10 +105,11 @@ C2<-ggplot(Full)+
 #NITROGEN
 N2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=N, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
-  scale_fill_manual(values=rankcols, name="Predicted rank")+
-  labs(y="Measured % N", x="Predicted Nutritional Rank", title="B")+
+  scale_fill_manual(values=rankcols, guide=FALSE)+
+  labs(y="Measured % N", title="B")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title=element_text(size=14),
+        axis.title.y=element_text(size=14),
+        axis.title.x=element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
@@ -117,10 +119,11 @@ N2<-ggplot(Full)+
 #PHOSPHORUS
 P2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=P, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
-  scale_fill_manual(values=rankcols, name="Predicted rank")+
-  labs(y="Measured % P", x="Predicted Nutritional Rank", title="C")+
+  scale_fill_manual(values=rankcols, guide=FALSE)+
+  labs(y="Measured % P", title="C")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title=element_text(size=14),
+        axis.title.y=element_text(size=14),
+        axis.title.x=element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
