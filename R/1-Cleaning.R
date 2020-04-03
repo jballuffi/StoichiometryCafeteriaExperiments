@@ -12,10 +12,11 @@ Spruce<-Spruce[Site=="BL"]
 Spruce$N<-Spruce$Total.N
 Spruce[, Total.N:=NULL] [, SampleLabel:=NULL] [, Site:=NULL] [, Species:=NULL]
 Spruce[,Sampling:="Sampled"]
-Spruce[SampleLoc=="I4", Sampling:="Offered"] [SampleLoc=="I2", Sampling:="Offered"] [SampleLoc=="J1", Sampling:="Offered"]
-Spruce[SampleLoc=="L6", Sampling:="Offered"] [SampleLoc=="L4", Sampling:="Offered"] [SampleLoc=="N5", Sampling:="Offered"]
-Spruce[SampleLoc=="I4", Rank:="High"] [SampleLoc=="I2", Rank:="High"] [SampleLoc=="J1", Rank:="High"]
-Spruce[SampleLoc=="L6", Rank:="Low"] [SampleLoc=="L4", Rank:="Low"] [SampleLoc=="N5", Rank:="Low"]
+
+#Identifying the trap locations we clipped from
+Spruce[SampleLoc%in%c("I2","I4","J1","L6","L6","N5"), Sampling:="Offered"]
+Spruce[SampleLoc%in%c("I2","I4","J1"), Rank:="High"]
+Spruce[SampleLoc%in%c("L4","L6","N5"), Rank:="Low"]
 Spruce[is.na(Rank), Rank:="None"]
 
   #Setting up the raster layers of interpolated nutrient maps
