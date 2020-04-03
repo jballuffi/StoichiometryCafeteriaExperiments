@@ -31,22 +31,18 @@ Spruce[, sd(N), by= Pred_rank]
 Spruce[, median(P), by=Pred_rank]
 Spruce[, sd(P), by=Pred_rank]
 
+#stats on difference in rank
 summary(lm(N~Pred_rank, data=Spruce))
 summary(lm(P~Pred_rank, data=Spruce))
 summary(lm(C~Pred_rank, data=Spruce))
 cor(Spruce$P, Spruce$N)
 
-plot()
-
-ggplot(Spruce)+
-  geom_boxplot(aes(x=Pred_rank, y=Ca))
 
 
-
-              ### S1 ####
+              ### Appendix 2 ####
 
 #CARBON
-C<-ggplot(Spruce)+
+C1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=C), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=C), size=3, width=.3)+
   labs(y="Measured % C", x="Predicted Nutritional Rank", title="A")+
@@ -59,7 +55,7 @@ C<-ggplot(Spruce)+
         panel.grid.major.y=element_line(color="grey"))
 
 #NITROGEN
-N<-ggplot(Spruce)+
+N1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=N), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=N), size=3, width=.3)+
   labs(y="Measured % N", x="Predicted Nutritional Rank", title="B")+
@@ -72,7 +68,7 @@ N<-ggplot(Spruce)+
         panel.grid.major.y=element_line(color="grey"))
 
 #PHOSPHORUS
-P<-ggplot(Spruce)+
+P1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=P), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=P), size=3, width=.3)+
   labs(y="Measured % P", x="Predicted Nutritional Rank", title="C")+
@@ -84,11 +80,60 @@ P<-ggplot(Spruce)+
         panel.grid.minor.y=element_line(color="grey"),
         panel.grid.major.y=element_line(color="grey"))
 
-CNP<-ggarrange(C,N,P, ncol=2, nrow=2)
-ggsave(filename="Findings/SupInfo1.jpeg", CNP, width = 12, height = 9, units = "in")
+CNP1<-ggarrange(C1,N1,P1, ncol=2, nrow=2)
+ggsave(filename="Findings/FigureA2.jpeg", CNP1, width = 12, height = 9, units = "in")
 
 
-        ### S2 ###
+                    ### Appendix 3 ####
+
+rankcols<- c("High"="grey70", "Low"="white")
+
+#CARBON
+C2<-ggplot(Full)+
+  geom_boxplot(aes(x=Sampling, y=C, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
+  scale_fill_manual(values=rankcols, name="Predicted rank")+
+  labs(y="Measured % C", x="Predicted Nutritional Rank", title="A")+
+  theme(axis.text=element_text(size=11, color="black"),
+        axis.title=element_text(size=14),
+        panel.background = element_blank(),
+        legend.key = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.grid.minor.y=element_line(color="grey"),
+        panel.grid.major.y=element_line(color="grey"))
+
+#NITROGEN
+N2<-ggplot(Full)+
+  geom_boxplot(aes(x=Sampling, y=N, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
+  scale_fill_manual(values=rankcols, name="Predicted rank")+
+  labs(y="Measured % N", x="Predicted Nutritional Rank", title="B")+
+  theme(axis.text=element_text(size=11, color="black"),
+        axis.title=element_text(size=14),
+        panel.background = element_blank(),
+        legend.key = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.grid.minor.y=element_line(color="grey"),
+        panel.grid.major.y=element_line(color="grey"))
+
+#PHOSPHORUS
+P2<-ggplot(Full)+
+  geom_boxplot(aes(x=Sampling, y=P, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
+  scale_fill_manual(values=rankcols, name="Predicted rank")+
+  labs(y="Measured % P", x="Predicted Nutritional Rank", title="C")+
+  theme(axis.text=element_text(size=11, color="black"),
+        axis.title=element_text(size=14),
+        panel.background = element_blank(),
+        legend.key = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        panel.grid.minor.y=element_line(color="grey"),
+        panel.grid.major.y=element_line(color="grey"))
+
+CNP2<-ggarrange(C2, N2, P2, ncol=3, nrow=1)
+ggsave(filename="Findings/FigureA3.jpeg", CNP2, width = 12, height = 5, units = "in")
+
+
+
+
+                        ### Figure A4 ###
 
 #make linear regression
 lmNP<-lm(P~N, data=Spruce)
@@ -111,5 +156,5 @@ Corr<-ggplot(Spruce)+
         legend.position = "right",
         legend.direction = "vertical")
 Corr
-ggsave(filename="Findings/SupInfo2.jpeg", Corr, width = 6, height = 4, units = "in")
+ggsave(filename="Findings/FigureA4.jpeg", Corr, width = 6, height = 4, units = "in")
 
