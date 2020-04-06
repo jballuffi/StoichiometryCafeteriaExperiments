@@ -1,6 +1,7 @@
 library(ggplot2)
 library(data.table)
 library(ggpubr)
+library(patchwork)
 
 #import data
 Spruce<-as.data.table(read.csv("Input/Spruce_subsamples_2019.csv"))
@@ -45,9 +46,10 @@ cor(Spruce$P, Spruce$N)
 C1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=C), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=C), size=3, width=.3)+
-  labs(y="Measured % C", x="Predicted Nutritional Rank", title="A")+
+  labs(x="Predicted Nutritional Rank", title="A) % Carbon")+
   theme(axis.text=element_text(size=11, color="black"),
         axis.title=element_text(size=14),
+        axis.title.y = element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
@@ -58,9 +60,10 @@ C1<-ggplot(Spruce)+
 N1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=N), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=N), size=3, width=.3)+
-  labs(y="Measured % N", x="Predicted Nutritional Rank", title="B")+
+  labs(x="Predicted Nutritional Rank", title="B) % Nitrogen")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title=element_text(size=14),
+        axis.title.x=element_text(size=14),
+        axis.title.y = element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
@@ -71,17 +74,18 @@ N1<-ggplot(Spruce)+
 P1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=P), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=P), size=3, width=.3)+
-  labs(y="Measured % P", x="Predicted Nutritional Rank", title="C")+
+  labs(x="Predicted Nutritional Rank", title="C) % Phosphorus")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title=element_text(size=14),
+        axis.title.x =element_text(size=14),
+        axis.title.y = element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
         panel.grid.minor.y=element_line(color="grey"),
         panel.grid.major.y=element_line(color="grey"))
 
-CNP1<-ggarrange(C1,N1,P1, ncol=2, nrow=2)
-ggsave(filename="Findings/FigureA2.jpeg", CNP1, width = 12, height = 9, units = "in")
+CNP1<-(C1 + N1 + P1)
+ggsave(filename="Findings/FigureA2.jpeg", CNP1, width = 12, height = 5, units = "in")
 
 
                     ### Appendix 3 ####
@@ -91,10 +95,10 @@ rankcols<- c("High"="grey70", "Low"="white")
 #CARBON
 C2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=C, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
-  scale_fill_manual(values=rankcols, guide=FALSE)+
-  labs(y="Measured % C", title="A")+
+  scale_fill_manual(values=rankcols, name="Predicted Rank")+
+  labs(title="A) % Carbon")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title.y=element_text(size=14),
+        axis.title.y= element_blank(),
         axis.title.x=element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
@@ -105,10 +109,10 @@ C2<-ggplot(Full)+
 #NITROGEN
 N2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=N, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
-  scale_fill_manual(values=rankcols, guide=FALSE)+
-  labs(y="Measured % N", title="B")+
+  scale_fill_manual(values=rankcols, name="Predicted Rank")+
+  labs(title="B) % Nitrogen")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title.y=element_text(size=14),
+        axis.title.y=element_blank(),
         axis.title.x=element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
@@ -119,10 +123,10 @@ N2<-ggplot(Full)+
 #PHOSPHORUS
 P2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=P, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
-  scale_fill_manual(values=rankcols, guide=FALSE)+
-  labs(y="Measured % P", title="C")+
+  scale_fill_manual(values=rankcols, name="Predicted Rank")+
+  labs(title="C) % Phosphorus")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title.y=element_text(size=14),
+        axis.title.y=element_blank(),
         axis.title.x=element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
@@ -130,7 +134,7 @@ P2<-ggplot(Full)+
         panel.grid.minor.y=element_line(color="grey"),
         panel.grid.major.y=element_line(color="grey"))
 
-CNP2<-ggarrange(C2, N2, P2, ncol=3, nrow=1)
+CNP2<-C2 + N2 + P2 + plot_layout(guides = 'collect')
 ggsave(filename="Findings/FigureA3.jpeg", CNP2, width = 12, height = 5, units = "in")
 
 
