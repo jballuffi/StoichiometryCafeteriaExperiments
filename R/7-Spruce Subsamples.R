@@ -11,11 +11,11 @@ DTtraps<-readRDS("Input/all_trap_locs.rds")
 Spruce$Pred_rank<-factor(Spruce$Pred_rank, levels=c("Low", "High"))  #set predicted rank with levels
 setnames(Spruce, "Total.N", "N")   #Changing names "old", "new"
 setnames(Spruce, "TC", "C")         #Changing names "old", "new"
-Spruce[, Sampling:="Fall subsample"]     #making new column for merge with the trap dt
+Spruce[, Sampling:="Offering subsample"]     #making new column for merge with the trap dt
 
 #set up trap datatable
 DTtraps<-DTtraps[Sampling=="Offered"]    #keeping only the 6 locations where subsamples were taken
-DTtraps[,Sampling:="Original clipping"]   #giving new value for later merge with the Spruce dt
+DTtraps[,Sampling:="Original sample"]   #giving new value for later merge with the Spruce dt
 DTtraps$Spruce<-NULL
 setnames(DTtraps, "TC", "C")               #renaming
 setnames(DTtraps, "Rank", "Pred_rank")     #renaming
@@ -48,7 +48,7 @@ C1<-ggplot(Spruce)+
   geom_jitter(aes(x=Pred_rank, y=C), size=3, width=.3)+
   labs(x="Predicted Nutritional Rank", title="A) % Carbon")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title=element_text(size=14),
+        axis.title=element_blank(),
         axis.title.y = element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
@@ -62,7 +62,7 @@ N1<-ggplot(Spruce)+
   geom_jitter(aes(x=Pred_rank, y=N), size=3, width=.3)+
   labs(x="Predicted Nutritional Rank", title="B) % Nitrogen")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title.x=element_text(size=14),
+        axis.title.x=element_text(size=16),
         axis.title.y = element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
@@ -76,7 +76,7 @@ P1<-ggplot(Spruce)+
   geom_jitter(aes(x=Pred_rank, y=P), size=3, width=.3)+
   labs(x="Predicted Nutritional Rank", title="C) % Phosphorus")+
   theme(axis.text=element_text(size=11, color="black"),
-        axis.title.x =element_text(size=14),
+        axis.title.x = element_blank(),
         axis.title.y = element_blank(),
         panel.background = element_blank(),
         legend.key = element_blank(),
