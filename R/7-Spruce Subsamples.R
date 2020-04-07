@@ -41,11 +41,15 @@ cor(Spruce$P, Spruce$N)
 
 
               ### Appendix 2 ####
+#show just the subsample data
+LocCols<-c("I2"="forest green", "I4"="darkolivegreen3", "J1"="blue4", 
+           "L4"="yellow3", "L6"="orange2", "N5"="darkgoldenrod4")
 
 #CARBON
 C1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=C), stat="boxplot", outlier.shape = NA, alpha=1)+
-  geom_jitter(aes(x=Pred_rank, y=C), size=3, width=.3)+
+  geom_jitter(aes(x=Pred_rank, y=C, colour=SampleLoc), size=4, width=.3)+
+  scale_color_manual(values=LocCols, name="Trap")+
   labs(x="Predicted Nutritional Rank", title="A) % Carbon")+
   theme(axis.text=element_text(size=11, color="black"),
         axis.title=element_blank(),
@@ -59,7 +63,8 @@ C1<-ggplot(Spruce)+
 #NITROGEN
 N1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=N), stat="boxplot", outlier.shape = NA, alpha=1)+
-  geom_jitter(aes(x=Pred_rank, y=N), size=3, width=.3)+
+  geom_jitter(aes(x=Pred_rank, y=N, colour=SampleLoc), size=4, width=.3)+
+  scale_color_manual(values=LocCols, name="Trap")+
   labs(x="Predicted Nutritional Rank", title="B) % Nitrogen")+
   theme(axis.text=element_text(size=11, color="black"),
         axis.title.x=element_text(size=16),
@@ -73,7 +78,8 @@ N1<-ggplot(Spruce)+
 #PHOSPHORUS
 P1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=P), stat="boxplot", outlier.shape = NA, alpha=1)+
-  geom_jitter(aes(x=Pred_rank, y=P), size=3, width=.3)+
+  geom_jitter(aes(x=Pred_rank, y=P, colour=SampleLoc), size=4, width=.3)+
+  scale_color_manual(values=LocCols, name="Trap")+
   labs(x="Predicted Nutritional Rank", title="C) % Phosphorus")+
   theme(axis.text=element_text(size=11, color="black"),
         axis.title.x = element_blank(),
@@ -84,11 +90,12 @@ P1<-ggplot(Spruce)+
         panel.grid.minor.y=element_line(color="grey"),
         panel.grid.major.y=element_line(color="grey"))
 
-CNP1<-(C1 + N1 + P1)
+CNP1<-(C1 + N1 + P1 + plot_layout(guides = 'collect'))
 ggsave(filename="Findings/FigureA2.jpeg", CNP1, width = 12, height = 5, units = "in")
 
 
                     ### Appendix 3 ####
+#show the subsample data compared to original samples
 
 rankcols<- c("High"="grey70", "Low"="white")
 
