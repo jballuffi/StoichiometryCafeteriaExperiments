@@ -2,9 +2,7 @@ libs<-c('dplyr', 'data.table','sf', 'rgdal','raster','sp', 'ggplot2','RColorBrew
 lapply(libs, require, character.only = TRUE)
 utm21N <- '+proj=longlat +zone=21 ellps=WGS84'
 
-      
            ### Manuscript Figures ###
-
 
 ### IMPORTING ###
 
@@ -15,19 +13,22 @@ GridBuffer<-st_read("Input/GridPts_Buffer100m.shp")
 effsC<-readRDS("Input/effects_coat.rds")
 effsT<-readRDS("Input/effects_temp.rds")
 
+### Subsetting feeding exepriments into habitated and non-habituated ###
 DTpiles1<-DTpiles[Trial==1]
 DTtrials1<-DTtrials[Trial==1]
 
+DTpiles2<-DTpiles[!Trial==1]
+DTtrials2<-DTtrials[!Trial==1]
+
+
+### Creating effects for temperature and coat colour figures
 TempMod<-lm(Diff_IR~Low_temp, data=DTtrials)
 effsT2<-as.data.table(effect(c("Low_temp"), xlevels=10, TempMod))
-
 Whitemod<-lm(Diff_IR~White, data=DTtrials)
 effsC2 <- as.data.table(effect(c("White"), xlevels=10, Whitemod))
 
 
-
-
-#import raster layers for N and P and project correctly
+### Import raster layers for N and P and project correctly
 bloomN<-raster("Input/PIMA_N.tif")
 bloomP<-raster("Input/PIMA_P.tif")
 bloomN<-projectRaster(bloomN,crs=utm21N)
@@ -38,7 +39,7 @@ bloomP_points <- rasterToPoints(bloomP)
 DFbloomP <- data.frame(bloomP_points)
 
 
-                              #### FIGURE 1 ####
+  #### FIGURE 1 ####
 
 TrapShapes<-c("Sampled"=16, "Interpolated"=9, "Offered"=8)
 
@@ -98,9 +99,39 @@ Fig1<-ggarrange(Nmap, Pmap, NPscatter, ncol=1, nrow=3)
 ggsave(filename="Findings/Figure1.jpeg", Fig1, width = 4.75, height = 8.5, units = "in")
 
 
-          ## Figure 2 = diagrams made in powerpoint
+    #### Figure 2 = diagrams made in powerpoint
 
-          ## Figure 3 see 6-figures second trials
+    #### FIGURE 3 ####
+
+#if you want a path plot, use ID_Year, not Eartag.
+
+Intake<-ggplot(data=DTtrials)+
+  geom_boxplot(position="dodge", aes(y=IR, x=Trial), outlier.shape = NA)+
+  geom_jitter(aes(y=IR, x=Trial), width=.25, size=3)+
+  labs(y="Intake Rate (g/kg/day)", x=" ")+
+  ggtitle("A")+
+  theme(axis.title = element_text(size=14),
+        axis.text.x = element_text(size=10),
+        legend.key = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1))
+
+ggplot(data=DTtrials)+
+  geom_hline(yintercept=0, size=1.2, color="grey40", linetype="dashed")+
+  geom_boxplot(position="dodge", aes(y=Diff_IR, x=Trial), outlier.shape = NA)+
+  geom_jitter(aes(y=Diff_IR, x=Trial), width=.25, size=3)+
+  labs(y="Preference for High Ranked Spruce", x="Trial Number")+
+  ggtitle("B")+
+  theme(axis.title = element_text(size=14),
+        axis.text.x = element_text(size=10),
+        legend.key = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1))
+
+Fig3<-ggarrange(Intake, Pref,  ncol=1, nrow=2, label.x = 3)
+ggsave(filename="Findings/Figure3.jpeg", Fig3, width = 5.5, height = 9.5, units = "in")
+
+
 
                   #### Figure 4 ####
 
