@@ -117,9 +117,9 @@ trials$Year <-factor(trials$Year)
 #make trial number a factor with levels
 trials$Trial <- factor(trials$Trial, levels = c("1", "2", "3"), ordered = TRUE)
 #create another option for trials, either habituated (never experimented on) or not (been through at least one experiment)
-trials[Trial==1, Habituation:="No"]
-trials[Trial==2, Habituation:="Yes"]
-trials[Trial==3, Habituation:="Yes"]
+trials[Trial==1, Habituation:="Non-habituated"]
+trials[Trial==2, Habituation:="Habituated"]
+trials[Trial==3, Habituation:="Habituated"]
 trials$Habituation<-factor(trials$Habituation)
 #make the trap letters and numbers easier to work with later in ggplot
 trials$LetterVis <- factor(trials$Letter, levels = c("A", "C","E", "F", "I", "L", "M", "N"), ordered=TRUE)
