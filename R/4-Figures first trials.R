@@ -104,7 +104,6 @@ ggsave(filename="Findings/Figure1.jpeg", Fig1, width = 4.75, height = 8.5, units
     #### FIGURE 3 ####
 
 #if you want a path plot, use ID_Year, not Eartag.
-
 Intake<-ggplot(data=DTtrials)+
   geom_boxplot(position="dodge", aes(y=IR, x=Trial), outlier.shape = NA)+
   geom_jitter(aes(y=IR, x=Trial), width=.25, size=3)+
@@ -116,7 +115,7 @@ Intake<-ggplot(data=DTtrials)+
         panel.background = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
 
-ggplot(data=DTtrials)+
+Pref<-ggplot(data=DTtrials)+
   geom_hline(yintercept=0, size=1.2, color="grey40", linetype="dashed")+
   geom_boxplot(position="dodge", aes(y=Diff_IR, x=Trial), outlier.shape = NA)+
   geom_jitter(aes(y=Diff_IR, x=Trial), width=.25, size=3)+
@@ -136,39 +135,23 @@ ggsave(filename="Findings/Figure3.jpeg", Fig3, width = 5.5, height = 9.5, units 
                   #### Figure 4 ####
 
 #Boxplot showing the total trend
-boxplot1<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
+boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
   geom_boxplot(position="dodge", notch=FALSE)+ 
   geom_jitter(width=.25, size=3)+
-  scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
   labs(y="Intake Rate (g/kg/day)", x="Nutritional Rank")+
-  ggtitle("A")+
-  theme(axis.title.y = element_text(size=14),
-        axis.title.x = element_text(size=12),
+  #ggtitle("A) Non-habituated Experiments")+
+  theme(axis.title = element_text(size=14),
         axis.text.x = element_text(size=10),
+        strip.background = element_blank(),   #for facet wrap
+        strip.text = element_text(size=12),   #for facet wrap
         legend.key = element_blank(),
         panel.background = element_blank(),
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
-boxplot1
 
-boxplot2<-ggplot(data=DTpiles2, aes(y=IR, x=Treatment))+
-  geom_boxplot(position="dodge", notch=FALSE)+ 
-  geom_jitter(width=.25, size=3)+
-  scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
-  labs(y="Intake Rate (g/kg/day)", x="Nutritional Rank")+
-  ggtitle("A")+
-  theme(axis.title.y = element_text(size=14),
-        axis.title.x = element_text(size=12),
-        axis.text.x = element_text(size=10),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
-boxplot2
-
-Fig4<-ggarrange(boxplot1, boxplot2,  ncol=2, nrow=1, label.x = 3)
+Fig4<- boxplot + facet_wrap(~Habituation, ncol = 2)
+Fig4
 ggsave(filename="Findings/Figure4.jpeg", Fig4, width = 7.7, height = 4.3, units = "in")
 
 
