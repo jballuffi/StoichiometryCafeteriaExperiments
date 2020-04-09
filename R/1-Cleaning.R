@@ -120,7 +120,7 @@ trials$Trial <- factor(trials$Trial, levels = c("1", "2", "3"), ordered = TRUE)
 trials[Trial==1, Habituation:="Non-habituated"]
 trials[Trial==2, Habituation:="Habituated"]
 trials[Trial==3, Habituation:="Habituated"]
-trials$Habituation<-factor(trials$Habituation)
+trials$Habituation<-factor(trials$Habituation, levels = c("Non-habituated", "Habituated"))
 #make the trap letters and numbers easier to work with later in ggplot
 trials$LetterVis <- factor(trials$Letter, levels = c("A", "C","E", "F", "I", "L", "M", "N"), ordered=TRUE)
 trials$NumberVis<-as.character(trials$Number)
