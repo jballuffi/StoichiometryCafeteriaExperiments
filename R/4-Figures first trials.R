@@ -132,9 +132,9 @@ ggsave(filename="Findings/Figure3.jpeg", Fig3, width = 5.5, height = 9.5, units 
 
 
 
-                  #### Figure 4 ####
+      #### Figure 4 ####
 
-#Boxplot showing the total trend
+#Boxplot showing the total trend for both habituated and non-habituated hares
 boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
   geom_boxplot(position="dodge", notch=FALSE)+ 
   geom_jitter(width=.25, size=3)+
@@ -155,7 +155,7 @@ Fig4
 ggsave(filename="Findings/Figure4.jpeg", Fig4, width = 7.7, height = 4.3, units = "in")
 
 
-                            #### Figure 5 ####
+      #### Figure 5 ####
 
 #Total prop vs. percent white
 RankShape<-c("High"=19, "Low"=1 )
@@ -224,17 +224,11 @@ DiffTemp<-ggplot(data=DTtrials1)+
         panel.background = element_blank(),
         panel.border = element_rect(colour = "black", fill=NA, size=1))
 
-
 Fig5<-ggarrange(IRWhite, IRTemp, DiffWhite, DiffTemp, ncol = 2, nrow = 2)
-
 ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 9.3, height = 9.3, units = "in")
 
 
-
-
-
-
-              ##### Figure A1 ######
+      ##### Figure A1 ######
 
 DBHN<-ggplot(data=DTtraps)+
   geom_point(aes(y=N, x=AvgDBH), size = 3)+
