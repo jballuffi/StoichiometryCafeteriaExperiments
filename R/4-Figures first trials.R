@@ -15,8 +15,8 @@ GridBuffer<-st_read("Input/GridPts_Buffer100m.shp")
 effsC<-readRDS("Input/effects_coat.rds")
 effsT<-readRDS("Input/effects_temp.rds")
 
-DTpiles<-DTpiles[Trial==1]
-DTtrials<-DTtrials[Trial==1]
+DTpiles1<-DTpiles[Trial==1]
+DTtrials1<-DTtrials[Trial==1]
 
 TempMod<-lm(Diff_IR~Low_temp, data=DTtrials)
 effsT2<-as.data.table(effect(c("Low_temp"), xlevels=10, TempMod))
@@ -149,7 +149,7 @@ RankShape<-c("High"=19, "Low"=1 )
 
 #Uses line from Energetic model
 IRWhite<-ggplot()+
-  geom_point(aes(y=IR, x=White, shape=Treatment),data=DTpiles, color="grey20", size=4)+
+  geom_point(aes(y=IR, x=White, shape=Treatment),data=DTpiles1, color="grey20", size=4)+
   geom_ribbon(aes(x=White, ymin=lower, ymax=upper), data=effsC, colour="grey80", alpha=.4 )+
   geom_abline(intercept = 47.32, slope = -27.6099, size=1.2, colour="grey20")+
   #geom_text(aes(.25, 0, label="y = -31.12x + 71.307"), size=5)+
@@ -165,7 +165,7 @@ IRWhite<-ggplot()+
 
 #line from energetic model
 IRTemp<-ggplot()+
-  geom_point(aes(y=IR, x=Low_temp, shape=Treatment),data=DTpiles, color="grey20", size=4)+
+  geom_point(aes(y=IR, x=Low_temp, shape=Treatment),data=DTpiles1, color="grey20", size=4)+
   geom_ribbon(aes(x=Low_temp, ymin=lower, ymax=upper), data=effsT, colour="grey80", alpha=.4 )+
   geom_abline(intercept = 47.32, slope = -2.7633, size=1.2, colour="grey20")+
   #geom_text(aes(.25, 0, label="y = -31.12x + 71.307"), size=5)+
@@ -180,7 +180,7 @@ IRTemp<-ggplot()+
         panel.border = element_rect(colour = "black", fill=NA, size=1))
 
 #line from new model
-DiffWhite<-ggplot(data=DTtrials)+
+DiffWhite<-ggplot(data=DTtrials1)+
   geom_ribbon(aes(x=White, ymin=lower, ymax=upper), data=effsC2, colour="grey80", alpha=.3 )+
   geom_abline(aes(intercept=-0.3709, slope=17.19), size=1.2, color="grey20")+
   geom_point(aes(y=Diff_IR, x=White), size=4, colour="grey20")+
@@ -196,7 +196,7 @@ DiffWhite<-ggplot(data=DTtrials)+
         panel.border = element_rect(colour = "black", fill=NA, size=1))
 
 #line from new model
-DiffTemp<-ggplot(data=DTtrials)+
+DiffTemp<-ggplot(data=DTtrials1)+
   geom_ribbon(aes(x=Low_temp, ymin=lower, ymax=upper), data=effsT2, colour="grey80", alpha=.3 )+
   geom_abline(aes(intercept=2.75, slope=.506), size=1.2, colour="grey20")+
   geom_point(aes(y=Diff_IR, x=Low_temp), size=4, colour="grey20")+
@@ -215,18 +215,6 @@ DiffTemp<-ggplot(data=DTtrials)+
 Fig5<-ggarrange(IRWhite, IRTemp, DiffWhite, DiffTemp, ncol = 2, nrow = 2)
 
 ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 9.3, height = 9.3, units = "in")
-
-
-              ### Additional figure of Total consumption vs. preference
-ggplot(data=DTtrials)+
-  geom_point(aes(y=Diff_IR, x=IR), size=4, colour="grey20")+
-  theme(axis.title.x = element_text(size=14),
-        axis.title.y = element_text(size=14),
-        axis.text.x = element_text(size=9),
-        axis.text.y = element_text(size=9),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
 
 
 
