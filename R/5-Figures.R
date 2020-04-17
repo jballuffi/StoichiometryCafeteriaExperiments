@@ -19,6 +19,9 @@ DTtrials1<-DTtrials[Trial==1] #non-habituated
 DTpiles2<-DTpiles[!Trial==1]  #habiuated
 DTtrials2<-DTtrials[!Trial==1] #habituated
 
+#subsetting trap data for visualizing only sampled locations
+DTtraps2<-DTtraps[!Sampling=="Interpolated"]
+
 ### Creating effects for temperature and coat colour figures
 TempMod<-lm(Diff_IR~Low_temp, data=DTtrials)
 effsT2<-as.data.table(effect(c("Low_temp"), xlevels=10, TempMod))
@@ -48,10 +51,13 @@ gridPSC <- data.table(bloomPSC_points)
 setnames(gridPSC, "bS_Phyto_BL_EBKRP_Terpene", "PSC")
 
 
+
+                                 ##### Plant Figures ####
+
+
   #### FIGURE 1 ####
 
 TrapShapes<-c("Sampled"=16, "Interpolated"=9, "Offered"=8)
-
 
 (Nmap<-ggplot(data=gridN) + 
   geom_raster(aes(x=x, y=y, fill=N))+
@@ -99,19 +105,115 @@ TrapShapes<-c("Sampled"=16, "Interpolated"=9, "Offered"=8)
           legend.position = "right"))
 
 Fig1 <- Nmap / Pmap / PSCmap + plot_layout(guides = 'collect')
-Fig1
 ggsave(filename="Findings/Figure1.jpeg", Fig1, width = 4.75, height = 8.5, units = "in")
 
 
+TrapShapes2<-c("Sampled"=16, "Offered"=8)
 
-
-(NPscatter<-ggplot(data=DTtraps)+
+(NPscatter<-ggplot(data=DTtraps2)+
   geom_point(aes(y=P, x=N, shape=Sampling), size=3)+
-  scale_shape_manual(values=TrapShapes, name="Spruce Status")+
+  scale_shape_manual(values=TrapShapes2, name="Site Status")+
   geom_abline(intercept = 0.01354, slope = 0.1256)+
   geom_text(aes(.85, .2, label="y = 0.13x + 0.014"), size=4)+
   geom_text(aes(.8, .19, label="R2 = 0.43"), size=4)+
   labs(y="% Phosphorus", x="% Nitrogen")+
+  ggtitle("A")+
+  theme(axis.title=element_text(size=14),
+        axis.text.x = element_text(size=8),
+        axis.text.y = element_text(size=8),
+        legend.key = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        legend.position = "right",
+        legend.direction = "vertical",
+        legend.text = element_text(size=9),
+        legend.title = element_text(size=11)))
+
+(NPSCscatter<-ggplot(data=DTtraps2)+
+    geom_point(aes(y=PSC, x=N, shape=Sampling), size=3)+
+    scale_shape_manual(values=TrapShapes2, name="Site Status")+
+    geom_abline(intercept = 24.761, slope = -7.56)+
+    geom_text(aes(1.27, 25, label="y = -7.6x + 24.8"), size=4)+
+    geom_text(aes(1.27, 24, label="R2 = 0.20"), size=4)+
+    labs(y="PSC", x="% Nitrogen")+
+    ggtitle("B")+
+    theme(axis.title=element_text(size=14),
+          axis.text.x = element_text(size=8),
+          axis.text.y = element_text(size=8),
+          legend.key = element_blank(),
+          panel.background = element_blank(),
+          panel.border = element_rect(colour = "black", fill=NA, size=1),
+          legend.position = "right",
+          legend.direction = "vertical",
+          legend.text = element_text(size=9),
+          legend.title = element_text(size=11)))
+
+(PPSCscatter<-ggplot(data=DTtraps2)+
+    geom_point(aes(y=PSC, x=P, shape=Sampling), size=3)+
+    scale_shape_manual(values=TrapShapes, name="Site Status")+
+    geom_abline(intercept = 21.74, slope = -32.95)+
+    geom_text(aes(.115, 25, label="y = -33.0x + 21.7"), size=4)+
+    geom_text(aes(.115, 24, label="R2 = 0.14"), size=4)+
+    labs(y="PSC", x="% Phosphorus")+
+    ggtitle("C")+
+    theme(axis.title=element_text(size=14),
+          axis.text.x = element_text(size=8),
+          axis.text.y = element_text(size=8),
+          legend.key = element_blank(),
+          panel.background = element_blank(),
+          panel.border = element_rect(colour = "black", fill=NA, size=1),
+          legend.position = "right",
+          legend.direction = "vertical",
+          legend.text = element_text(size=9),
+          legend.title = element_text(size=11)))
+
+Fig1.5 <- NPscatter / NPSCscatter / PPSCscatter + plot_layout(guides = 'collect')
+ggsave(filename="Findings/FigureNPPSC.jpeg", Fig1.5, width = 4.75, height = 8.5, units = "in")
+
+##### Figure A1 ######
+
+DBHN<-ggplot(data=DTtraps)+
+  geom_point(aes(y=N, x=AvgDBH), size = 3)+
+  geom_text(aes(5, 1.35, label="p = 0.36"), size=5)+
+  labs(x=NULL, y="% Nitrogen")+
+  ggtitle("A")+
+  theme(axis.title=element_text(size=14),
+        axis.text.x = element_text(size=8),
+        axis.text.y = element_text(size=8),
+        legend.key = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor.y = element_line(color="grey"),
+        panel.grid.major.y = element_line(color="grey"),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        legend.position = "right",
+        legend.direction = "vertical",
+        legend.text = element_text(size=9),
+        legend.title = element_text(size=11))
+
+CanopyN<-ggplot(data=DTtraps)+
+  geom_point(aes(y=N, x=CanopyClosure), size = 3)+
+  geom_abline(aes(intercept=.637, slope=.00336), size=1.2, colour="grey20")+
+  geom_text(aes(30, 1.35, label="y = 0.00336x + 0.637"), size=5)+
+  geom_text(aes(25, 1.25, label="t = 3.09, p < 0.01"), size=5)+
+  labs(x=NULL, y=NULL)+
+  ggtitle("B")+
+  theme(axis.title=element_text(size=14),
+        axis.text.x = element_text(size=8),
+        axis.text.y = element_text(size=8),
+        legend.key = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor.y = element_line(color="grey"),
+        panel.grid.major.y = element_line(color="grey"),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        legend.position = "right",
+        legend.direction = "vertical",
+        legend.text = element_text(size=9),
+        legend.title = element_text(size=11))
+
+DBHP<-ggplot(data=DTtraps)+
+  geom_point(aes(y=P, x=AvgDBH), size = 3)+
+  geom_text(aes(5, .2, label="p = 0.69"), size=5)+
+  labs(x="Mean DBH (cm)", y="% Phosphorus")+
   ggtitle("C")+
   theme(axis.title=element_text(size=14),
         axis.text.x = element_text(size=8),
@@ -124,11 +226,38 @@ ggsave(filename="Findings/Figure1.jpeg", Fig1, width = 4.75, height = 8.5, units
         legend.position = "right",
         legend.direction = "vertical",
         legend.text = element_text(size=9),
-        legend.title = element_text(size=11)))
+        legend.title = element_text(size=11))
+
+CanopyP<-ggplot(data=DTtraps)+
+  geom_point(aes(y=P, x=CanopyClosure), size = 3)+
+  geom_abline(aes(intercept=0.098, slope=0.00068), size=1.2, colour="grey20")+
+  geom_text(aes(33, .2, label="y = 0.098x + 0.000682"), size=5)+
+  geom_text(aes(26, .185, label="t = 3.041, p < 0.01"), size=5)+
+  labs(x="Canopy Closure (%)", y=NULL)+
+  ggtitle("D")+
+  theme(axis.title=element_text(size=14),
+        axis.text.x = element_text(size=8),
+        axis.text.y = element_text(size=8),
+        legend.key = element_blank(),
+        panel.background = element_blank(),
+        panel.grid.minor.y = element_line(color="grey"),
+        panel.grid.major.y = element_line(color="grey"),
+        panel.border = element_rect(colour = "black", fill=NA, size=1),
+        legend.position = "right",
+        legend.direction = "vertical",
+        legend.text = element_text(size=9),
+        legend.title = element_text(size=11))
+
+FigA1<-ggarrange(DBHN, CanopyN, DBHP, CanopyP, ncol=2, nrow=2)
+ggsave(filename="Findings/FigureA1.jpeg", FigA1, width = 8, height = 7, units = "in")
 
 
 
-    #### Figure 2 = diagrams made in powerpoint
+
+                              #### Herbivory Figures ####
+
+
+
 
     #### FIGURE 3 ####
 
@@ -256,87 +385,6 @@ DiffTemp<-ggplot(data=DTtrials1)+
 Fig5<-ggarrange(IRWhite, IRTemp, DiffWhite, DiffTemp, ncol = 2, nrow = 2)
 ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 9.3, height = 9.3, units = "in")
 
-
-      ##### Figure A1 ######
-
-DBHN<-ggplot(data=DTtraps)+
-  geom_point(aes(y=N, x=AvgDBH), size = 3)+
-  geom_text(aes(5, 1.35, label="p = 0.36"), size=5)+
-  labs(x=NULL, y="% Nitrogen")+
-  ggtitle("A")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=8),
-        axis.text.y = element_text(size=8),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        legend.position = "right",
-        legend.direction = "vertical",
-        legend.text = element_text(size=9),
-        legend.title = element_text(size=11))
-
-CanopyN<-ggplot(data=DTtraps)+
-  geom_point(aes(y=N, x=CanopyClosure), size = 3)+
-  geom_abline(aes(intercept=.637, slope=.00336), size=1.2, colour="grey20")+
-  geom_text(aes(30, 1.35, label="y = 0.00336x + 0.637"), size=5)+
-  geom_text(aes(25, 1.25, label="t = 3.09, p < 0.01"), size=5)+
-  labs(x=NULL, y=NULL)+
-  ggtitle("B")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=8),
-        axis.text.y = element_text(size=8),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        legend.position = "right",
-        legend.direction = "vertical",
-        legend.text = element_text(size=9),
-        legend.title = element_text(size=11))
-
-DBHP<-ggplot(data=DTtraps)+
-  geom_point(aes(y=P, x=AvgDBH), size = 3)+
-  geom_text(aes(5, .2, label="p = 0.69"), size=5)+
-  labs(x="Mean DBH (cm)", y="% Phosphorus")+
-  ggtitle("C")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=8),
-        axis.text.y = element_text(size=8),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        legend.position = "right",
-        legend.direction = "vertical",
-        legend.text = element_text(size=9),
-        legend.title = element_text(size=11))
-
-CanopyP<-ggplot(data=DTtraps)+
-  geom_point(aes(y=P, x=CanopyClosure), size = 3)+
-  geom_abline(aes(intercept=0.098, slope=0.00068), size=1.2, colour="grey20")+
-  geom_text(aes(33, .2, label="y = 0.098x + 0.000682"), size=5)+
-  geom_text(aes(26, .185, label="t = 3.041, p < 0.01"), size=5)+
-  labs(x="Canopy Closure (%)", y=NULL)+
-  ggtitle("D")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=8),
-        axis.text.y = element_text(size=8),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        legend.position = "right",
-        legend.direction = "vertical",
-        legend.text = element_text(size=9),
-        legend.title = element_text(size=11))
-
-FigA1<-ggarrange(DBHN, CanopyN, DBHP, CanopyP, ncol=2, nrow=2)
-ggsave(filename="Findings/FigureA1.jpeg", FigA1, width = 8, height = 7, units = "in")
 
 
 
