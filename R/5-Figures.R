@@ -242,7 +242,9 @@ ggsave(filename="Findings/FigureNPPSC.jpeg", Fig1.5, width = 4.75, height = 8.5,
 
 (DBHPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=AvgDBH), size = 3)+
-    # geom_text(aes(5, .2, label="p = 0.69"), size=5)+
+    geom_text(aes(12, 25.2, label="y = -0.42x + 24.4"), size=5)+
+    geom_text(aes(12, 24, label="t = -1.85, p = 0.07"), size=5)+
+    geom_abline(aes(intercept=24.38, slope=-0.42), size=1.2, colour="grey20")+
     labs(x="Mean DBH (cm)", y="PSC")+
     ggtitle("E")+
     theme(axis.title=element_text(size=14),
@@ -258,9 +260,9 @@ ggsave(filename="Findings/FigureNPPSC.jpeg", Fig1.5, width = 4.75, height = 8.5,
 
 (CanopyPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=CanopyClosure), size = 3)+
-    # geom_abline(aes(intercept=0.098, slope=0.00068), size=1.2, colour="grey20")+
-    # geom_text(aes(33, .2, label="y = 0.098x + 0.000682"), size=5)+
-    # geom_text(aes(26, .185, label="t = 3.041, p < 0.01"), size=5)+
+    geom_abline(aes(intercept=24.38, slope=-0.045), size=1.2, colour="grey20")+
+    geom_text(aes(24, 14,  label="y = 0.098x + 0.000682"), size=5)+
+    geom_text(aes(24, 13, label="t = -2.44, p =0.02"), size=5)+
     labs(x="Canopy Closure (%)", y=NULL)+
     ggtitle("F")+
     theme(axis.title=element_text(size=14),
