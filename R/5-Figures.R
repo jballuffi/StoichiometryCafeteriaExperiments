@@ -172,7 +172,7 @@ ggsave(filename="Findings/FigureNPPSC.jpeg", Fig1.5, width = 4.75, height = 8.5,
 
 ##### Figure A1 ######
 
-DBHN<-ggplot(data=DTtraps)+
+(DBHN<-ggplot(data=DTtraps2)+
   geom_point(aes(y=N, x=AvgDBH), size = 3)+
   geom_text(aes(5, 1.35, label="p = 0.36"), size=5)+
   labs(x=NULL, y="% Nitrogen")+
@@ -182,15 +182,13 @@ DBHN<-ggplot(data=DTtraps)+
         axis.text.y = element_text(size=8),
         legend.key = element_blank(),
         panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
         legend.position = "right",
         legend.direction = "vertical",
         legend.text = element_text(size=9),
-        legend.title = element_text(size=11))
+        legend.title = element_text(size=11)))
 
-CanopyN<-ggplot(data=DTtraps)+
+(CanopyN<-ggplot(data=DTtraps2)+
   geom_point(aes(y=N, x=CanopyClosure), size = 3)+
   geom_abline(aes(intercept=.637, slope=.00336), size=1.2, colour="grey20")+
   geom_text(aes(30, 1.35, label="y = 0.00336x + 0.637"), size=5)+
@@ -202,15 +200,13 @@ CanopyN<-ggplot(data=DTtraps)+
         axis.text.y = element_text(size=8),
         legend.key = element_blank(),
         panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
         legend.position = "right",
         legend.direction = "vertical",
         legend.text = element_text(size=9),
-        legend.title = element_text(size=11))
+        legend.title = element_text(size=11)))
 
-DBHP<-ggplot(data=DTtraps)+
+(DBHP<-ggplot(data=DTtraps2)+
   geom_point(aes(y=P, x=AvgDBH), size = 3)+
   geom_text(aes(5, .2, label="p = 0.69"), size=5)+
   labs(x="Mean DBH (cm)", y="% Phosphorus")+
@@ -220,15 +216,13 @@ DBHP<-ggplot(data=DTtraps)+
         axis.text.y = element_text(size=8),
         legend.key = element_blank(),
         panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
         legend.position = "right",
         legend.direction = "vertical",
         legend.text = element_text(size=9),
-        legend.title = element_text(size=11))
+        legend.title = element_text(size=11)))
 
-CanopyP<-ggplot(data=DTtraps)+
+(CanopyP<-ggplot(data=DTtraps2)+
   geom_point(aes(y=P, x=CanopyClosure), size = 3)+
   geom_abline(aes(intercept=0.098, slope=0.00068), size=1.2, colour="grey20")+
   geom_text(aes(33, .2, label="y = 0.098x + 0.000682"), size=5)+
@@ -240,15 +234,48 @@ CanopyP<-ggplot(data=DTtraps)+
         axis.text.y = element_text(size=8),
         legend.key = element_blank(),
         panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
         panel.border = element_rect(colour = "black", fill=NA, size=1),
         legend.position = "right",
         legend.direction = "vertical",
         legend.text = element_text(size=9),
-        legend.title = element_text(size=11))
+        legend.title = element_text(size=11)))
 
-FigA1<-ggarrange(DBHN, CanopyN, DBHP, CanopyP, ncol=2, nrow=2)
+(DBHPSC<-ggplot(data=DTtraps2)+
+    geom_point(aes(y=PSC, x=AvgDBH), size = 3)+
+    # geom_text(aes(5, .2, label="p = 0.69"), size=5)+
+    labs(x="Mean DBH (cm)", y="PSC")+
+    ggtitle("E")+
+    theme(axis.title=element_text(size=14),
+          axis.text.x = element_text(size=8),
+          axis.text.y = element_text(size=8),
+          legend.key = element_blank(),
+          panel.background = element_blank(),
+          panel.border = element_rect(colour = "black", fill=NA, size=1),
+          legend.position = "right",
+          legend.direction = "vertical",
+          legend.text = element_text(size=9),
+          legend.title = element_text(size=11)))
+
+(CanopyPSC<-ggplot(data=DTtraps2)+
+    geom_point(aes(y=PSC, x=CanopyClosure), size = 3)+
+    # geom_abline(aes(intercept=0.098, slope=0.00068), size=1.2, colour="grey20")+
+    # geom_text(aes(33, .2, label="y = 0.098x + 0.000682"), size=5)+
+    # geom_text(aes(26, .185, label="t = 3.041, p < 0.01"), size=5)+
+    labs(x="Canopy Closure (%)", y=NULL)+
+    ggtitle("F")+
+    theme(axis.title=element_text(size=14),
+          axis.text.x = element_text(size=8),
+          axis.text.y = element_text(size=8),
+          legend.key = element_blank(),
+          panel.background = element_blank(),
+          panel.border = element_rect(colour = "black", fill=NA, size=1),
+          legend.position = "right",
+          legend.direction = "vertical",
+          legend.text = element_text(size=9),
+          legend.title = element_text(size=11)))
+
+
+FigA1<-ggarrange(DBHN, CanopyN, DBHP, CanopyP, DBHPSC, CanopyPSC, ncol=2, nrow=3)
 ggsave(filename="Findings/FigureA1.jpeg", FigA1, width = 8, height = 7, units = "in")
 
 
