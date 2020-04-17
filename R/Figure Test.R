@@ -12,6 +12,23 @@ DTpiles<-readRDS("Input/pile_format.rds")
 DTtrials<-readRDS("Input/trial_format.rds")
 
 
+lmMC<-lm(Mass_change~Diff_IR, data=DTtrials)
+Weightloss<-ggplot(DTtrials)+
+  geom_point(aes(y=Mass_change, x=Diff_IR),  size=3, colour="grey20")+
+  geom_abline(intercept = (coef(lmMC)["(Intercept)"]), slope = (coef(lmMC)["Diff_IR"]), size=1.2)+
+  geom_vline(xintercept=0, size=1.2, color="grey40", linetype="dashed")+
+  labs(x="Preference for high ranked spruce", y="Weight lost during trial (%)")+
+  theme(axis.title = element_text(size=14),
+        axis.text.x = element_text(size=10),
+        axis.text.y = element_text(size=10),
+        legend.key = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1))
+ggsave(filename="Findings/Weightloss.jpeg", Weightloss, width = 6, height = 4, units = "in")
+
+
+
+
 
 #Boxplot showing the total trend
 boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
