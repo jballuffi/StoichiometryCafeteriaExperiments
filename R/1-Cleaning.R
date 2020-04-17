@@ -14,7 +14,7 @@ Spruce[, Total.N:=NULL] [, SampleLabel:=NULL] [, Site:=NULL] [, Species:=NULL]
 Spruce[,Sampling:="Sampled"]
 
 #Identifying the trap locations we clipped from
-Spruce[SampleLoc%in%c("I2","I4","J1","L6","L6","N5"), Sampling:="Offered"]
+Spruce[SampleLoc%in%c("I2","I4","J1","L6","L4","N5"), Sampling:="Offered"]
 Spruce[SampleLoc%in%c("I2","I4","J1"), Rank:="High"]
 Spruce[SampleLoc%in%c("L4","L6","N5"), Rank:="Low"]
 Spruce[is.na(Rank), Rank:="None"]
