@@ -13,7 +13,7 @@ DTtrials<-readRDS("Input/trial_format.rds")
 
 
 lmMC<-lm(Mass_change~Diff_IR, data=DTtrials)
-Weightloss<-ggplot(DTtrials)+
+(Weightloss<-ggplot(DTtrials)+
   geom_point(aes(y=Mass_change, x=Diff_IR),  size=3, colour="grey20")+
   geom_abline(intercept = (coef(lmMC)["(Intercept)"]), slope = (coef(lmMC)["Diff_IR"]), size=1.2)+
   geom_vline(xintercept=0, size=1.2, color="grey40", linetype="dashed")+
@@ -23,7 +23,7 @@ Weightloss<-ggplot(DTtrials)+
         axis.text.y = element_text(size=10),
         legend.key = element_blank(),
         panel.background = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
+        panel.border = element_rect(colour = "black", fill=NA, size=1)))
 ggsave(filename="Findings/Weightloss.jpeg", Weightloss, width = 6, height = 4, units = "in")
 
 
@@ -31,7 +31,7 @@ ggsave(filename="Findings/Weightloss.jpeg", Weightloss, width = 6, height = 4, u
 
 
 #Boxplot showing the total trend
-boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
+(boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
   geom_boxplot(position="dodge", notch=FALSE)+ 
   geom_jitter(width=.25, size=3)+
   scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
@@ -44,11 +44,11 @@ boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
         panel.background = element_blank(),
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
-boxplot
+        panel.border = element_rect(colour = "black", fill=NA, size=1)))
+
 
 #path plot that matches boxplot
-pathplot<-ggplot(data=DTpiles)+
+(pathplot<-ggplot(data=DTpiles)+
   geom_path(aes(y=IR, x=Treatment, group=sampleID), size=1)+
   labs(y="Intake Rate (g/kg/day)", x="Nutritional Rank")+
   ggtitle("B")+
@@ -61,8 +61,7 @@ pathplot<-ggplot(data=DTpiles)+
         panel.background = element_blank(),
         panel.grid.minor.y = element_line(color="grey"),
         panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
-pathplot
+        panel.border = element_rect(colour = "black", fill=NA, size=1)))
 
 ggarrange(boxplot, pathplot,  ncol=2, nrow=1, label.x = 3)
 
@@ -130,7 +129,6 @@ ggplot(data=DTtrials)+
 
 Fig5<-ggarrange(IRWhite, IRTemp, DiffWhite, DiffTemp, ncol = 2, nrow = 2)
 
-ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 9.3, height = 9.3, units = "in")
 
 
               ### Additional figure of Total consumption vs. preference
