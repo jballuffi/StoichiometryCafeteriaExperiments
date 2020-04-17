@@ -1,4 +1,4 @@
-libs<-c('dplyr', 'data.table','sf', 'rgdal','raster','sp', 'ggplot2','RColorBrewer', 'ggpubr', 'effects')
+libs<-c('dplyr', 'data.table','sf', 'rgdal','raster','sp', 'ggplot2','RColorBrewer', 'ggpubr', 'effects', 'patchwork')
 lapply(libs, require, character.only = TRUE)
 utm21N <- '+proj=longlat +zone=21 ellps=WGS84'
 
@@ -14,12 +14,10 @@ effsC<-readRDS("Input/effects_coat.rds")
 effsT<-readRDS("Input/effects_temp.rds")
 
 ### Subsetting feeding exepriments into habitated and non-habituated ###
-DTpiles1<-DTpiles[Trial==1]
-DTtrials1<-DTtrials[Trial==1]
-
-DTpiles2<-DTpiles[!Trial==1]
-DTtrials2<-DTtrials[!Trial==1]
-
+DTpiles1<-DTpiles[Trial==1]   #non-habituated
+DTtrials1<-DTtrials[Trial==1] #non-habituated
+DTpiles2<-DTpiles[!Trial==1]  #habiuated
+DTtrials2<-DTtrials[!Trial==1] #habituated
 
 ### Creating effects for temperature and coat colour figures
 TempMod<-lm(Diff_IR~Low_temp, data=DTtrials)
@@ -29,14 +27,25 @@ effsC2 <- as.data.table(effect(c("White"), xlevels=10, Whitemod))
 
 
 ### Import raster layers for N and P and project correctly
-bloomN<-raster("Input/PIMA_N.tif")
-bloomP<-raster("Input/PIMA_P.tif")
-bloomN<-projectRaster(bloomN,crs=utm21N)
-bloomP<-projectRaster(bloomP,crs=utm21N)
+bloomN <- raster("Input/PIMA_N.tif")
+bloomP <- raster("Input/PIMA_P.tif")
+bloomPSC <- raster("Input/bS_Phyto_BL_EBKRP_Terpene.tif")
+bloomN <- projectRaster(bloomN,crs=utm21N)
+bloomP <- projectRaster(bloomP,crs=utm21N)
+bloomPSC <- projectRaster(bloomPSC,crs=utm21N)
+
+#convering all rasters into dataframes
 bloomN_points <- rasterToPoints(bloomN)
-DFbloomN <- data.frame(bloomN_points)
+gridN <- data.table(bloomN_points)
+setnames(gridN, "PIMA_N", "N")
+
 bloomP_points <- rasterToPoints(bloomP)
-DFbloomP <- data.frame(bloomP_points)
+gridP <- data.table(bloomP_points)
+setnames(gridP, "PIMA_P", "P")
+
+bloomPSC_points <- rasterToPoints(bloomPSC)
+gridPSC <- data.table(bloomPSC_points)
+setnames(gridPSC, "bS_Phyto_BL_EBKRP_Terpene", "PSC")
 
 
   #### FIGURE 1 ####
@@ -44,12 +53,12 @@ DFbloomP <- data.frame(bloomP_points)
 TrapShapes<-c("Sampled"=16, "Interpolated"=9, "Offered"=8)
 
 
-Nmap<-ggplot(data=DFbloomN) + 
-  geom_raster(aes(x=x, y=y, fill=PIMA_N))+
+(Nmap<-ggplot(data=gridN) + 
+  geom_raster(aes(x=x, y=y, fill=N))+
   scale_fill_gradient(high="darkgreen", low="yellow", name="% N")+
-  ggtitle("A")+
+  ggtitle("A) Nitrogen")+
   geom_point(aes(POINT_X, POINT_Y, shape=Sampling), color="black", data = DTtraps, size=3)+
-  scale_shape_manual(values=TrapShapes, guide=FALSE)+
+  scale_shape_manual(values=TrapShapes, name="Site Status")+
   theme(axis.text= element_blank(),
         axis.ticks = element_blank(),
         axis.title = element_blank(),
@@ -57,14 +66,14 @@ Nmap<-ggplot(data=DFbloomN) +
         panel.border = element_blank(),
         legend.key.size = unit(.75, "line"),
         legend.key = element_blank(),
-        legend.position = "right")
+        legend.position = "right"))
 
-Pmap<-ggplot(data=DFbloomP) + 
-  geom_raster(aes(x=x, y=y, fill=PIMA_P))+
+(Pmap<-ggplot(data=gridP) + 
+  geom_raster(aes(x=x, y=y, fill=P))+
   scale_fill_gradient(high="darkgreen", low="yellow", name="% P")+
   geom_point(aes(POINT_X, POINT_Y, shape=Sampling), color="black", data = DTtraps, size=3)+
-  scale_shape_manual(values=TrapShapes, guide=FALSE)+
-  ggtitle("B")+
+  scale_shape_manual(values=TrapShapes, name="Site Status")+
+  ggtitle("B) Phosphorus")+
   theme(axis.text = element_blank(),
         axis.ticks = element_blank(),
         axis.title = element_blank(),
@@ -72,9 +81,31 @@ Pmap<-ggplot(data=DFbloomP) +
         panel.border = element_blank(),
         legend.key = element_blank(),
         legend.key.size = unit(.75, "line"),
-        legend.position = "right")
+        legend.position = "right"))
 
-NPscatter<-ggplot(data=DTtraps)+
+(PSCmap<-ggplot(data=gridPSC) + 
+    geom_raster(aes(x=x, y=y, fill=PSC))+
+    scale_fill_gradient(high="yellow", low="darkgreen", name="Total PSC")+
+    geom_point(aes(POINT_X, POINT_Y, shape=Sampling), color="black", data = DTtraps, size=3)+
+    scale_shape_manual(values=TrapShapes, name="Site Status")+
+    ggtitle("C) Plant Secondary Compounds")+
+    theme(axis.text = element_blank(),
+          axis.ticks = element_blank(),
+          axis.title = element_blank(),
+          panel.background = element_blank(),
+          panel.border = element_blank(),
+          legend.key = element_blank(),
+          legend.key.size = unit(.75, "line"),
+          legend.position = "right"))
+
+Fig1 <- Nmap / Pmap / PSCmap + plot_layout(guides = 'collect')
+Fig1
+ggsave(filename="Findings/Figure1.jpeg", Fig1, width = 4.75, height = 8.5, units = "in")
+
+
+
+
+(NPscatter<-ggplot(data=DTtraps)+
   geom_point(aes(y=P, x=N, shape=Sampling), size=3)+
   scale_shape_manual(values=TrapShapes, name="Spruce Status")+
   geom_abline(intercept = 0.01354, slope = 0.1256)+
@@ -93,10 +124,8 @@ NPscatter<-ggplot(data=DTtraps)+
         legend.position = "right",
         legend.direction = "vertical",
         legend.text = element_text(size=9),
-        legend.title = element_text(size=11))
+        legend.title = element_text(size=11)))
 
-Fig1<-ggarrange(Nmap, Pmap, NPscatter, ncol=1, nrow=3)
-ggsave(filename="Findings/Figure1.jpeg", Fig1, width = 4.75, height = 8.5, units = "in")
 
 
     #### Figure 2 = diagrams made in powerpoint
