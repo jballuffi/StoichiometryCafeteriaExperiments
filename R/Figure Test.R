@@ -72,8 +72,9 @@ RankShape<-c("High"=19, "Low"=1 )
 
 #Uses line from Energetic model
 ggplot()+
-  geom_point(aes(y=IR, x=White, colour=Habituation),data=DTtrials, size=4)+
+  geom_point(aes(y=IR, x=White, shape=Treatment),data=DTpiles, size=4)+
   #geom_text(aes(.25, 0, label="y = -31.12x + 71.307"), size=5)+
+  scale_shape_manual(values=RankShape, name="Spruce Rank")+
   labs(y="Intake Rate (g/kg/day)", x=" ")+
   ggtitle("A")+
   theme(axis.title = element_text(size=14),
