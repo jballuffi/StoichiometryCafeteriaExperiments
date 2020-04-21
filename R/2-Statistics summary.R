@@ -1,12 +1,10 @@
 libs<-c("data.table",'stargazer', 'AICcmodavg', 'ggplot2','RColorBrewer','lme4','pwr','MuMIn','nlme', 'effects', 'arm', 'rsq')
 lapply(libs, require, character.only = TRUE)
 
-      ###Statistical Analyses
-DTpiles<-readRDS("Input/pile_format.rds")
-DTtrials<-readRDS("Input/trial_format.rds")
+      ###Stats for Black Spruce Variation on grid
+
+#Import trap/grid dataframe
 DTtraps<-readRDS("Input/all_trap_locs.rds")
-
-
 #clean DTtraps for summary stats
 DTtraps<-DTtraps[!Sampling=="Interpolated"]
 
@@ -86,45 +84,3 @@ hist(resPSC)
 fitPSC<-fitted(HabModPSC)
 plot(resPSC~fitPSC)
 lag.plot(resPSC,diag = FALSE, do.lines = FALSE)
-
-
-
-
-### Summary info for cafeteria experiments
-
-
-summary(DTtrials$Year)
-summary(DTtrials$Trial)
-unique(DTtrials$Eartag)
-unique(DTtrials$ID_Year)
-mean(DTtrials$Start_mass)
-mean(DTtrials$Mass_change, na.rm=TRUE)
-
-
-unique(DTpiles$Date) #summary of experiment dates
-max(DTpiles$Low_temp) #max lowest temp
-min(DTpiles$Low_temp) #min lowest temp
-max(DTpiles$White)  #max %white, the min was zero
-median(DTpiles$White)  #median %white
-
-#correlations to check for overlap between hypothesis testing
-cor(DTtrials$White, DTtrials$N)
-cor(DTtrials$Low_temp, DTtrials$N)
-cor(DTtrials$White, DTtrials$P)
-cor(DTtrials$Low_temp, DTtrials$P)
-cor(DTtrials$White, DTtrials$Low_temp)
-cor(DTtrials$Low_temp, DTtrials$Start_mass)
-
-DTtrials[, mean(IR)]  #mean intake rate from both piles
-DTtrials[, sd(IR)]    #standard error for intake rate from both piles
-DTtrials[, mean(TotalEaten)]  #mean total consumption in grams
-DTpiles[, mean(IR), by=Treatment]   #means for total eaten from each pile
-DTpiles[, sd(IR), by=Treatment]     #standard error for total eaten from each pile
-
-DTtrials[, mean(IR), by=Trial]   #means for total eaten by trial
-DTtrials[, sd(IR), by=Trial]     #standard error for total eaten by trial
-summary(lm(DTtrials$IR~DTtrials$Trial))    #the t-value and p-value for this pattern
-summary(lm(DTtrials$Diff_IR~DTtrials$Trial))  #showing lack of significance for trial effects on preference
-
-summary(lm(DTpiles$IR~DTpiles$Side))
-df(lm(DTpiles$IR~DTpiles$Side))
