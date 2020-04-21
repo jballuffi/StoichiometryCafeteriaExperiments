@@ -6,8 +6,6 @@ DTtrials<-readRDS("Input/trial_format.rds")
 DTtrials<-DTtrials[!is.na(Mass_change)]
 
 
-summary(lm(Mass_change~Habituation, data=DTtrials))
-
 #### Weight Change AIC ####
 
 Choice.Mod<-list()
@@ -17,19 +15,19 @@ Choice.Mod[[1]]<-lm(Mass_change ~ 1, data = DTtrials)
 #2 = Base model
 Choice.Mod[[2]]<-lm(Mass_change ~ Diff_IR, data = DTtrials)
 #3 = Temperature model
-Choice.Mod[[3]]<- lm(Mass_change ~ Diff_IR + Low_temp, data = DTtrials)
+Choice.Mod[[3]]<- lm(Mass_change ~ Low_temp*Diff_IR, data = DTtrials)
 #4 = Coat Color model
-Choice.Mod[[4]]<- lm(Mass_change ~ Diff_IR + White, data = DTtrials)
+Choice.Mod[[4]]<- lm(Mass_change ~ White*Diff_IR, data = DTtrials)
 #5 = Energetic model 
-Choice.Mod[[5]]<- lm(Mass_change ~ Diff_IR + White*Low_temp, data = DTtrials)
+Choice.Mod[[5]]<- lm(Mass_change ~ White*Diff_IR + Low_temp*Diff_IR, data = DTtrials)
 #6 = Nitrogen model
-Choice.Mod[[6]]<- lm(Mass_change ~ Diff_IR + N_mean, data = DTtrials)
+Choice.Mod[[6]]<- lm(Mass_change ~ N_mean*Diff_IR, data = DTtrials)
 #7 = Phosphorus model
-Choice.Mod[[7]]<- lm(Mass_change ~ Diff_IR + P_mean, data = DTtrials)
+Choice.Mod[[7]]<- lm(Mass_change ~ P_mean*Diff_IR, data = DTtrials)
 #8 = Nutrient model
-Choice.Mod[[8]]<- lm(Mass_change ~ Diff_IR + N_mean*P_mean, data = DTtrials)
+Choice.Mod[[8]]<- lm(Mass_change ~ N_mean*Diff_IR + P_mean*Diff_IR, data = DTtrials)
 #9 = Full model
-Choice.Mod[[9]]<- lm(Mass_change ~ Diff_IR + White + Low_temp + N_mean + P_mean, data = DTtrials)
+Choice.Mod[[9]]<- lm(Mass_change ~ White*Diff_IR + Low_temp*Diff_IR + N_mean*Diff_IR + P_mean*Diff_IR, data = DTtrials)
 
 #create a vector of names to trace back models in set 
 Modnames <- paste("mod", 1:length(Choice.Mod), sep = " ")
@@ -39,23 +37,17 @@ AIC<-as.data.table(AIC)
 AIC[Modnames=="mod 1", Model:="Null"][Modnames=="mod 2", Model:="Base"][Modnames=="mod 3", Model:="Temperature"]
 AIC[Modnames=="mod 4", Model:="Coat Colour"][Modnames=="mod 5", Model:="Energetic"][Modnames=="mod 6", Model:="Nitrogen"]
 AIC[Modnames=="mod 7", Model:="Phosphorus"][Modnames=="mod 8", Model:="Nutrient"][Modnames=="mod 9", Model:="Full"]
-
 AIC[, Modnames:=NULL]
 
-Base<-lm(Mass_change ~ Diff_IR, data = DTtrials)
-Temp<-lm(Mass_change ~ Diff_IR + Low_temp, data = DTtrials)
-Coat<-lm(Mass_change ~ Diff_IR + White, data = DTtrials)
-Energetic<-lm(Mass_change ~ Diff_IR + White*Low_temp, data = DTtrials)
-Nitrogen<-lm(Mass_change ~ Diff_IR + N_mean, data = DTtrials)
-Phosphorus<-lm(Mass_change ~ Diff_IR + P_mean, data = DTtrials)
-Nutrient<-lm(Mass_change ~ Diff_IR + N_mean*P_mean, data = DTtrials)
-Full<-lm(Mass_change ~ Diff_IR + White + Low_temp + N_mean + P_mean, data = DTtrials)
 
-summary(Base)
-summary(Temp)
-summary(Coat)
-summary(Energetic)
-summary(Nitrogen)
-summary(Phosphorus)
-summary(Nutrient)
-summary(Full)
+#individual model outputs
+summary(Choice.Mod[[1]]) #Null
+summary(Choice.Mod[[2]]) #Base
+summary(Choice.Mod[[3]]) #Temp
+summary(Choice.Mod[[4]]) #Coat
+summary(Choice.Mod[[5]]) #Energetic
+summary(Choice.Mod[[6]]) #Nitrogen
+summary(Choice.Mod[[7]]) #Phosphorus
+summary(Choice.Mod[[8]]) #Nutrient
+summary(Choice.Mod[[9]]) #Full
+
