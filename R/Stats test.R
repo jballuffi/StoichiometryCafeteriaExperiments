@@ -3,8 +3,47 @@ lapply(libs, require, character.only = TRUE)
 
       ###Statistical Analyses
 DTpiles<-readRDS("Input/pile_format.rds")
+DTtrials<-readRDS("Input/trial_format.rds")
 
-                      #### Feeding AIC ####
+#Summary info for cafeteria experiments
+unique(DTpiles$Date) #summary of experiment dates
+unique(DTtrials$Year) #summary of years
+unique(DTpiles$Eartag) #summary of individuals
+max(DTpiles$Low_temp) #max lowest temp
+min(DTpiles$Low_temp) #min lowest temp
+max(DTpiles$White)  
+median(DTpiles$White)
+summary(DTtrials)
+
+DTtrials[, mean(TotalEaten)]  #mean total eaten from both piles
+DTtrials[, sd(TotalEaten)]    #standard error for toal eaten from both piles
+DTpiles[, mean(Total), by=Treatment]   #means for total eaten from each pile
+DTpiles[, sd(Total), by=Treatment]     #standard error for total eaten from each pile
+
+#correlations to check for overlap between hypothesis testing
+cor(DTtrials$White, DTtrials$N)
+cor(DTtrials$Low_temp, DTtrials$N)
+cor(DTtrials$White, DTtrials$P)
+cor(DTtrials$Low_temp, DTtrials$P)
+cor(DTtrials$White, DTtrials$Low_temp)
+cor(DTtrials$Low_temp, DTtrials$Start_mass)
+
+DTtrials[, mean(IR)]  #mean intake rate from both piles
+DTtrials[, sd(IR)]    #standard error for intake rate from both piles
+DTtrials[, mean(TotalEaten)]  #mean total consumption in grams
+DTpiles[, mean(IR), by=Treatment]   #means for total eaten from each pile
+DTpiles[, sd(IR), by=Treatment]     #standard error for total eaten from each pile
+
+DTtrials[, mean(IR), by=Trial]   #means for total eaten by trial
+DTtrials[, sd(IR), by=Trial]     #standard error for total eaten by trial
+summary(lm(DTtrials$IR~DTtrials$Trial))    #the t-value and p-value for this pattern
+summary(lm(DTtrials$Diff_IR~DTtrials$Trial))  #showing lack of significance for trial effects on preference
+
+summary(lm(DTpiles$IR~DTpiles$Side))
+df(lm(DTpiles$IR~DTpiles$Side))
+
+
+            #### Feeding AIC ####
 
 Choice.Mod<-list()
 
@@ -35,30 +74,30 @@ AIC<-as.data.table(AIC)
 AIC[Modnames=="mod 1", Model:="Null"][Modnames=="mod 2", Model:="Base"][Modnames=="mod 3", Model:="Temperature"]
 AIC[Modnames=="mod 4", Model:="Coat Colour"][Modnames=="mod 5", Model:="Energetic"][Modnames=="mod 6", Model:="Nitrogen"]
 AIC[Modnames=="mod 7", Model:="Phosphorus"][Modnames=="mod 8", Model:="Nutrient"][Modnames=="mod 9", Model:="Full"]
-
 AIC[, Modnames:=NULL]
 
 
-#model to run separately, don't show p-values, but can get R2s
-Null<-lmer(IR ~ 1 + (1|sampleID) , REML=F, data=DTpiles)
-Base<-lmer(IR ~ Habituation + Treatment + (1|sampleID), REML=F, data=DTpiles)
-Temp<-lmer(IR ~ Habituation + Low_temp*Treatment + (1|sampleID), REML=F, data=DTpiles)
-Coat<-lmer(IR ~ Habituation + White*Treatment + (1|sampleID), REML=F, data=DTpiles)
-Energetic<-lmer(IR ~ Habituation + White*Treatment + Low_temp*Treatment + (1|sampleID), REML=F, data=DTpiles)
-Nitrogen<-lmer(IR ~ Habituation + N_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
-Phosphorus<-lmer(IR ~ Habituation + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
-Nutrient<-lmer(IR ~ Habituation + N_mean*Treatment + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
-Full<-lmer(IR ~ Habituation + White*Treatment + Low_temp*Treatment + N_mean*Treatment + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
+#individual model summary outputs
+summary(Choice.Mod[[1]]) #Null
+summary(Choice.Mod[[2]]) #Base
+summary(Choice.Mod[[3]]) #Temp
+summary(Choice.Mod[[4]]) #Coat
+summary(Choice.Mod[[5]]) #Energetic
+summary(Choice.Mod[[6]]) #Nitrogen
+summary(Choice.Mod[[7]]) #Phosphorus
+summary(Choice.Mod[[8]]) #Nutrient
+summary(Choice.Mod[[9]]) #Full
 
-r.squaredGLMM(Null)
-r.squaredGLMM(Base)
-r.squaredGLMM(Temp)
-r.squaredGLMM(Coat)
-r.squaredGLMM(Energetic)
-r.squaredGLMM(Nitrogen)
-r.squaredGLMM(Phosphorus)
-r.squaredGLMM(Nutrient)
-r.squaredGLMM(Full)
+#individual model R2 outputs
+r.squaredGLMM(Choice.Mod[[1]]) #Null
+r.squaredGLMM(Choice.Mod[[2]]) #Base
+r.squaredGLMM(Choice.Mod[[3]]) #Temp
+r.squaredGLMM(Choice.Mod[[4]]) #Coat
+r.squaredGLMM(Choice.Mod[[5]]) #Energetic
+r.squaredGLMM(Choice.Mod[[6]]) #Nitrogen
+r.squaredGLMM(Choice.Mod[[7]]) #Phosphorus
+r.squaredGLMM(Choice.Mod[[8]]) #Nutrient
+r.squaredGLMM(Choice.Mod[[9]]) #Full
 
 #to get effects for the coat colour in the energetics model
 effsC <- as.data.table(effect(c("White"), xlevels=15, Energetic))
