@@ -3,8 +3,6 @@ lapply(libs, require, character.only = TRUE)
 
       ###Statistical Analyses
 DTpiles<-readRDS("Input/pile_format.rds")
-DTtrials<-readRDS("Input/trial_format.rds")
-
 
                       #### Feeding AIC ####
 
