@@ -61,10 +61,11 @@ r.squaredGLMM(Choice.Mod[[7]]) #Phosphorus
 r.squaredGLMM(Choice.Mod[[8]]) #Nutrient
 r.squaredGLMM(Choice.Mod[[9]]) #Full
 
+
 #to get effects for the coat colour in the energetics model
-effsC <- as.data.table(effect(c("White"), xlevels=15, Energetic))
+effsC <- as.data.table(effect(c("White"), xlevels=15, Choice.Mod[[5]]))
 #to get the effects for the temperature in the energetic model
-effsT <- as.data.table(effect(c("Low_temp"), xlevels=15, Energetic))
+effsT <- as.data.table(effect(c("Low_temp"), xlevels=15, Choice.Mod[[5]]))
 
 
 #Same models but diff function
@@ -88,26 +89,25 @@ summary(Nutrient2)
 summary(Full2)
 
 
-
-
+#Saving effects into input folder
 saveRDS(effsC, "Input/effects_coat.rds")
 saveRDS(effsT, "Input/effects_temp.rds")
 
 #### Saving tables
 
-#table 2
-fwrite(AIC, "Findings/Table2.csv")     ###Saving the AIC table
+#table 3
+fwrite(AIC, "Findings/Table3.csv")     ###Saving the AIC table
 
-#table 3 information
+#table 4 information
 summary(Energetic2)                  
 
 
-#table 4: all models
-stargazer(Null, Base, Temp, Coat, Energetic, Nitrogen, Phosphorus, Nutrient, Full,
+#table 5: all models
+stargazer(Choice.Mod,
           type="html",
-          out="Findings/table4.html",
+          out="Findings/table5.html",
           digits = 2,
-          column.labels = c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full"),
-          covariate.labels = c("Temp", "White", "N", "P", "Rank", "Temp*Rank", "White*Rank", "Temp*Rank", "N*Rank", "P*Rank", "N*Rank", "P*Rank"),
-          dep.var.labels = "Grams of Spruce Pile Consumed"
+          column.labels = c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full")
+          # covariate.labels = c("Temp", "White", "N", "P", "Rank", "Temp*Rank", "White*Rank", "Temp*Rank", "N*Rank", "P*Rank", "N*Rank", "P*Rank"),
+          # dep.var.labels = "Grams of Spruce Pile Consumed"
 )
