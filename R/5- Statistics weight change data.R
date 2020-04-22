@@ -3,6 +3,7 @@ lapply(libs, require, character.only = TRUE)
 
 #import trial format
 DTtrials<-readRDS("Input/trial_format.rds")
+#elminate two experiments where bunnies escaped
 DTtrials<-DTtrials[!is.na(Mass_change)]
 
 
@@ -50,4 +51,39 @@ summary(Choice.Mod[[6]]) #Nitrogen
 summary(Choice.Mod[[7]]) #Phosphorus
 summary(Choice.Mod[[8]]) #Nutrient
 summary(Choice.Mod[[9]]) #Full
+
+#individual model R2 outputs
+r.squaredGLMM(Choice.Mod[[1]]) #Null
+r.squaredGLMM(Choice.Mod[[2]]) #Base
+r.squaredGLMM(Choice.Mod[[3]]) #Temp
+r.squaredGLMM(Choice.Mod[[4]]) #Coat
+r.squaredGLMM(Choice.Mod[[5]]) #Energetic
+r.squaredGLMM(Choice.Mod[[6]]) #Nitrogen
+r.squaredGLMM(Choice.Mod[[7]]) #Phosphorus
+r.squaredGLMM(Choice.Mod[[8]]) #Nutrient
+r.squaredGLMM(Choice.Mod[[9]]) #Full
+
+#to get effects for weightloss~preference
+effsP <- as.data.table(effect(c("Diff_IR"), xlevels=15, Choice.Mod[[2]]))
+
+#saving the effects
+saveRDS(effsP, "Input/effects_pref.rds")
+
+#### Saving tables
+
+#table 6
+fwrite(AIC, "Findings/Table6.csv")     ###Saving the AIC table
+
+#table 7 information
+summary(Choice.Mod[[2]])                  
+
+
+#table 8: all models
+stargazer(Choice.Mod,
+          type="html",
+          out="Findings/table8.html",
+          digits = 2,
+          column.labels = c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full")
+          # dep.var.labels = "Grams of Spruce Pile Consumed"
+)
 
