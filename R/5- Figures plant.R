@@ -212,8 +212,8 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units
 
 (DBHPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=AvgDBH), size = 3)+
-    geom_text(aes(12, 25.2, label="y = -0.42x + 24.4"), size=5)+
-    geom_text(aes(12, 24, label="t = -1.85, p = 0.07"), size=5)+
+    geom_text(aes(11, 25.2, label="y = -0.42x + 24.4"), size=5)+
+    geom_text(aes(11, 24, label="t = -1.85, p = 0.07"), size=5)+
     geom_abline(aes(intercept=24.38, slope=-0.42), size=1.2, colour="grey20")+
     labs(x="Mean DBH (cm)", y="PSC")+
     ggtitle("E")+
@@ -231,7 +231,7 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units
 (CanopyPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=CanopyClosure), size = 3)+
     geom_abline(aes(intercept=24.38, slope=-0.045), size=1.2, colour="grey20")+
-    geom_text(aes(24, 14,  label="y = 0.098x + 0.000682"), size=5)+
+    geom_text(aes(26, 14,  label="y = 0.098x + 0.000682"), size=5)+
     geom_text(aes(24, 13, label="t = -2.44, p =0.02"), size=5)+
     labs(x="Canopy Closure (%)", y=NULL)+
     ggtitle("F")+
@@ -248,5 +248,5 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units
 
 
 Fig3<-ggarrange(DBHN, CanopyN, DBHP, CanopyP, DBHPSC, CanopyPSC, ncol=2, nrow=3)
-ggsave(filename="Findings/Figure3.jpeg", FigA1, width = 8, height = 7, units = "in")
+ggsave(filename="Findings/Figure3.jpeg", Fig3, width = 9, height = 10, units = "in")
 
