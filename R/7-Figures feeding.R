@@ -69,8 +69,7 @@ ggsave(filename="Findings/Figure4.jpeg", Fig4, width = 5.5, height = 11.5, units
 #Boxplot showing the total trend
 (boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
    geom_boxplot(position="dodge", notch=FALSE)+ 
-   geom_jitter(width=.25, size=3)+
-   #scale_fill_manual(values=cols, guide=FALSE)+ #this is where the manual colors come in
+   geom_jitter( width=.25, size=3)+
    labs(y="Intake Rate (g/kg/day)", x="Nutritional Rank")+
    ggtitle("A")+
    theme(axis.title.y = element_text(size=14),
@@ -85,10 +84,9 @@ ggsave(filename="Findings/Figure4.jpeg", Fig4, width = 5.5, height = 11.5, units
 #path plot that matches boxplot
 (pathplot<-ggplot(data=DTpiles)+
     geom_path(aes(y=IR, x=Treatment, group=sampleID), size=1)+
-    labs(y="Intake Rate (g/kg/day)", x="Nutritional Rank")+
+    labs(y=" ", x="Nutritional Rank")+
     ggtitle("B")+
-    theme(axis.title.y = element_blank(),
-          axis.title.x = element_text(size=12),
+    theme(axis.title.x = element_text(size=12),
           axis.text.x = element_text(size=10),
           axis.text.y = element_blank(),
           axis.ticks.y = element_blank(),
@@ -98,20 +96,22 @@ ggsave(filename="Findings/Figure4.jpeg", Fig4, width = 5.5, height = 11.5, units
           panel.grid.major.y = element_line(color="grey"),
           panel.border = element_rect(colour = "black", fill=NA, size=1)))
 
-ggarrange(boxplot, pathplot,  ncol=2, nrow=1, label.x = 3)
-ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 7.7, height = 4.3, units = "in")
+Fig5<- ggarrange(boxplot, pathplot,  ncol=2, nrow=1, label.x = 3)
+ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 7.3, height = 4.3, units = "in")
 
 
-      #### Figure 5 ####
+#### Figure 6 ####
+#What to reconsider what to plot here. Possibly just lines and effects from models
+#can plot raw data figures in appendix possibly
 
 #Total prop vs. percent white
 RankShape<-c("High"=19, "Low"=1 )
 
 #Uses line from Energetic model
-IRWhite<-ggplot()+
-  geom_point(aes(y=IR, x=White, shape=Treatment),data=DTpiles1, color="grey20", size=4)+
-  geom_ribbon(aes(x=White, ymin=lower, ymax=upper), data=effsC, colour="grey80", alpha=.4 )+
-  geom_abline(intercept = 47.32, slope = -27.6099, size=1.2, colour="grey20")+
+(IRWhite<-ggplot()+
+  geom_point(aes(y=IR, x=White, shape=Treatment),data=DTpiles, color="grey20", size=4)+
+  #geom_ribbon(aes(x=White, ymin=lower, ymax=upper), data=effsC, colour="grey80", alpha=.4 )+
+  #geom_abline(intercept = 47.32, slope = -27.6099, size=1.2, colour="grey20")+
   #geom_text(aes(.25, 0, label="y = -31.12x + 71.307"), size=5)+
   scale_shape_manual(values=RankShape, name="Nutrient Rank", guide=FALSE)+
   labs(y="Intake Rate (g/kg/day)", x=" ")+
@@ -121,13 +121,13 @@ IRWhite<-ggplot()+
         axis.text.y = element_text(size=10),
         legend.key = element_blank(),
         panel.background = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
+        panel.border = element_rect(colour = "black", fill=NA, size=1)))
 
 #line from energetic model
-IRTemp<-ggplot()+
-  geom_point(aes(y=IR, x=Low_temp, shape=Treatment),data=DTpiles1, color="grey20", size=4)+
-  geom_ribbon(aes(x=Low_temp, ymin=lower, ymax=upper), data=effsT, colour="grey80", alpha=.4 )+
-  geom_abline(intercept = 47.32, slope = -2.7633, size=1.2, colour="grey20")+
+(IRTemp<-ggplot()+
+  geom_point(aes(y=IR, x=Low_temp, shape=Treatment),data=DTpiles, color="grey20", size=4)+
+  #geom_ribbon(aes(x=Low_temp, ymin=lower, ymax=upper), data=effsT, colour="grey80", alpha=.4 )+
+  #geom_abline(intercept = 47.32, slope = -2.7633, size=1.2, colour="grey20")+
   #geom_text(aes(.25, 0, label="y = -31.12x + 71.307"), size=5)+
   scale_shape_manual(values=RankShape, name="Nutrient Rank", guide=FALSE)+
   labs(y=" ", x=" ")+
@@ -137,12 +137,12 @@ IRTemp<-ggplot()+
         axis.text.y = element_text(size=10),
         legend.key = element_blank(),
         panel.background = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
+        panel.border = element_rect(colour = "black", fill=NA, size=1)))
 
 #line from new model
-DiffWhite<-ggplot(data=DTtrials1)+
-  geom_ribbon(aes(x=White, ymin=lower, ymax=upper), data=effsC2, colour="grey80", alpha=.3 )+
-  geom_abline(aes(intercept=-0.3709, slope=17.19), size=1.2, color="grey20")+
+(DiffWhite<-ggplot(data=DTtrials)+
+  # geom_ribbon(aes(x=White, ymin=lower, ymax=upper), data=effsC2, colour="grey80", alpha=.3 )+
+  # geom_abline(aes(intercept=-0.3709, slope=17.19), size=1.2, color="grey20")+
   geom_point(aes(y=Diff_IR, x=White), size=4, colour="grey20")+
   #geom_text(aes(.89, -45, label="y = -146.7x + 154.6"), size=5)+
   labs(y="Preference for High Ranked Spruce", x="Percent White")+
@@ -153,12 +153,12 @@ DiffWhite<-ggplot(data=DTtrials1)+
         axis.text.y = element_text(size=10),
         legend.key = element_blank(),
         panel.background = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
+        panel.border = element_rect(colour = "black", fill=NA, size=1)))
 
 #line from new model
-DiffTemp<-ggplot(data=DTtrials1)+
-  geom_ribbon(aes(x=Low_temp, ymin=lower, ymax=upper), data=effsT2, colour="grey80", alpha=.3 )+
-  geom_abline(aes(intercept=2.75, slope=.506), size=1.2, colour="grey20")+
+(DiffTemp<-ggplot(data=DTtrials)+
+  #geom_ribbon(aes(x=Low_temp, ymin=lower, ymax=upper), data=effsT2, colour="grey80", alpha=.3 )+
+  #geom_abline(aes(intercept=2.75, slope=.506), size=1.2, colour="grey20")+
   geom_point(aes(y=Diff_IR, x=Low_temp), size=4, colour="grey20")+
   #geom_text(aes(1.4, -40, label="y = 6.17x + 17"), size=5)+
   labs(y=" ", x="Low Ambient Temperature (C)")+
@@ -169,10 +169,45 @@ DiffTemp<-ggplot(data=DTtrials1)+
         axis.text.y = element_text(size=10),
         legend.key = element_blank(),
         panel.background = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1))
+        panel.border = element_rect(colour = "black", fill=NA, size=1)))
 
-Fig5<-ggarrange(IRWhite, IRTemp, DiffWhite, DiffTemp, ncol = 2, nrow = 2)
-ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 9.3, height = 9.3, units = "in")
+Fig6<-ggarrange(IRWhite, IRTemp, DiffWhite, DiffTemp, ncol = 2, nrow = 2)
+ggsave(filename="Findings/Figure6.jpeg", Fig6, width = 9.3, height = 9.3, units = "in")
+
+
+### Figure 7 ###
+
+(Fig7<-ggplot(DTtrials)+
+    geom_ribbon(aes(x=Diff_IR, ymin=lower, ymax=upper), data=effsP, colour="grey80", alpha=.3 )+
+    geom_point(aes(y=Mass_change, x=Diff_IR),  size=3, colour="grey20")+
+    geom_abline(intercept = 0.06, slope = -0.0003809, size=1.2)+
+    geom_vline(xintercept=0, size=1.2, color="grey40", linetype="dashed")+
+    labs(x="Preference for high ranked spruce", y="Weight lost during trial (%)")+
+    theme(axis.title = element_text(size=14),
+          axis.text.x = element_text(size=10),
+          axis.text.y = element_text(size=10),
+          legend.key = element_blank(),
+          panel.background = element_blank(),
+          panel.border = element_rect(colour = "black", fill=NA, size=1)))
+ggsave(filename="Findings/Figure7.jpeg", Fig7, width = 6, height = 4, units = "in")
+
+
+
+
+### Figure 8 ###
+
+#Additional figure of Total consumption vs. preference
+summary(lm(Diff_IR~IR, data=DTtrials))
+(Fig8<-ggplot(data=DTtrials)+
+  geom_abline(intercept=1.13, slope=0.038, size=1.2)+
+  geom_point(aes(y=Diff_IR, x=IR), size=4, colour="grey20")+
+  theme(axis.title.x = element_text(size=14),
+        axis.title.y = element_text(size=14),
+        axis.text.x = element_text(size=9),
+        axis.text.y = element_text(size=9),
+        legend.key = element_blank(),
+        panel.background = element_blank(),
+        panel.border = element_rect(colour = "black", fill=NA, size=1)))
 
 
 
