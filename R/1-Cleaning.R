@@ -29,6 +29,21 @@ bloomN<-projectRaster(bloomN,crs=utm21N)
 bloomP<-projectRaster(bloomP,crs=utm21N)
 bloomPSC<-projectRaster(bloomPSC,crs=utm21N)
 
+#convering all rasters into dataframes/datatables for future figures
+#not to used further in this script, only just saved at end
+bloomN_points <- rasterToPoints(bloomN)
+gridN <- data.table(bloomN_points)
+setnames(gridN, "PIMA_N", "N")
+
+bloomP_points <- rasterToPoints(bloomP)
+gridP <- data.table(bloomP_points)
+setnames(gridP, "PIMA_P", "P")
+
+bloomPSC_points <- rasterToPoints(bloomPSC)
+gridPSC <- data.table(bloomPSC_points)
+setnames(gridPSC, "bS_Phyto_BL_EBKRP_Terpene", "PSC")
+
+
   #import the grid shapefile, get rid of other 3 grid locations
 grid<-as.data.table(st_read("Input/SamplePoints_AllGrids.shp"))
 grid<-grid[SiteName=="Bloomfield"]
@@ -167,4 +182,7 @@ trials[, Diff_IR := (IR_high-IR_low)] #Calculate the "preference" in intake rate
 saveRDS(piles,"Input/pile_format.rds")   #by pile
 saveRDS(DTtraps, "Input/all_trap_locs.rds") #trap locs, names, sampling status, and stoich results
 saveRDS(trials, "Input/trial_format.rds")  #by trial
+saveRDS(gridN, "Input/bloomfield_N.rds")   #datatable of bloomfield N raster
+saveRDS(gridP, "Input/bloomfield_P.rds")  #datatable of bloomfield P raster
+saveRDS(gridPSC, "Input/bloomfield_PSC.rds")  #datatable of bloomdield PSC raster
 
