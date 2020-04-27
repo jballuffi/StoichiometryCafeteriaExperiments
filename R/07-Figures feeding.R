@@ -14,6 +14,11 @@ effsP<-readRDS("Input/effects_pref.rds")
 
 
 #### FIGURE 4 ####
+theme4 <- theme(axis.title = element_text(size=14),
+              axis.text.x = element_text(size=10),
+              legend.key = element_blank(),
+              panel.background = element_blank(),
+              panel.border = element_rect(colour = "black", fill=NA, size=1))
 
 #if you want a path plot, use ID_Year, not Eartag.
 (Intake<-ggplot(data=DTtrials)+
@@ -21,11 +26,7 @@ effsP<-readRDS("Input/effects_pref.rds")
   geom_jitter(aes(y=IR, x=Trial), width=.25, size=3)+
   labs(y="Intake Rate (g/kg/day)", x=" ")+
   ggtitle("A")+
-  theme(axis.title = element_text(size=14),
-        axis.text.x = element_text(size=10),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1)))
+  theme4)
 
 (Pref<-ggplot(data=DTtrials)+
   geom_hline(yintercept=0, size=1.2, color="grey40", linetype="dashed")+
@@ -33,11 +34,7 @@ effsP<-readRDS("Input/effects_pref.rds")
   geom_jitter(aes(y=Diff_IR, x=Trial), width=.25, size=3)+
   labs(y="Preference for High Ranked Spruce", x=" ")+
   ggtitle("B")+
-  theme(axis.title = element_text(size=14),
-        axis.text.x = element_text(size=10),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1)))
+  theme4)
 
 (Weight<-ggplot(data=DTtrials)+
   geom_hline(yintercept=0, size=1.2, color="grey40", linetype="dashed")+
@@ -45,11 +42,7 @@ effsP<-readRDS("Input/effects_pref.rds")
   geom_jitter(aes(y=Mass_change, x=Trial), width=.25, size=3)+
   labs(y="Change in body mass (% lost)", x="Trial Number")+
   ggtitle("C")+
-  theme(axis.title = element_text(size=14),
-        axis.text.x = element_text(size=10),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1)))
+  theme4)
 
 
 Fig4<-ggarrange(Intake, Pref, Weight,  ncol=1, nrow=3, label.x = 3)
@@ -58,6 +51,14 @@ ggsave(filename="Findings/Figure4.jpeg", Fig4, width = 5.5, height = 11.5, units
 
 
 #### Figure 5 ####
+theme5 <- theme(axis.title.y = element_text(size=14),
+                axis.title.x = element_text(size=12),
+                axis.text.x = element_text(size=10),
+                legend.key = element_blank(),
+                panel.background = element_blank(),
+                panel.grid.minor.y = element_line(color="grey"),
+                panel.grid.major.y = element_line(color="grey"),
+                panel.border = element_rect(colour = "black", fill=NA, size=1))
 
 #Boxplot showing the total trend
 (boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
@@ -65,29 +66,14 @@ ggsave(filename="Findings/Figure4.jpeg", Fig4, width = 5.5, height = 11.5, units
    geom_jitter( width=.25, size=3)+
    labs(y="Intake Rate (g/kg/day)", x="Nutritional Rank")+
    ggtitle("A")+
-   theme(axis.title.y = element_text(size=14),
-         axis.title.x = element_text(size=12),
-         axis.text.x = element_text(size=10),
-         legend.key = element_blank(),
-         panel.background = element_blank(),
-         panel.grid.minor.y = element_line(color="grey"),
-         panel.grid.major.y = element_line(color="grey"),
-         panel.border = element_rect(colour = "black", fill=NA, size=1)))
+   theme5)
 
 #path plot that matches boxplot
 (pathplot<-ggplot(data=DTpiles)+
     geom_path(aes(y=IR, x=Treatment, group=sampleID), size=1)+
     labs(y=" ", x="Nutritional Rank")+
     ggtitle("B")+
-    theme(axis.title.x = element_text(size=12),
-          axis.text.x = element_text(size=10),
-          axis.text.y = element_blank(),
-          axis.ticks.y = element_blank(),
-          legend.key = element_blank(),
-          panel.background = element_blank(),
-          panel.grid.minor.y = element_line(color="grey"),
-          panel.grid.major.y = element_line(color="grey"),
-          panel.border = element_rect(colour = "black", fill=NA, size=1)))
+    theme5)
 
 Fig5<- ggarrange(boxplot, pathplot,  ncol=2, nrow=1, label.x = 3)
 ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 7.3, height = 4.3, units = "in")
@@ -95,40 +81,35 @@ ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 7.3, height = 4.3, units 
 
 #### Figure 6 ####
 qualcols<-c("High" = "Forestgreen", "Low" = "Yellow3")
+theme6 <- theme(axis.title = element_text(size=14),
+               axis.text.x = element_text(size=10),
+               axis.text.y = element_text(size=10),
+               legend.key = element_blank(),
+               panel.background = element_blank(),
+               panel.grid = element_line(colour = "grey90", size = .3),
+               panel.border = element_rect(colour = "black", fill=NA, size=1))
 
+#plot that shows intake as a function of coat colour with spruce quality
 (Coat<-ggplot()+
   geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group, fill=group),
               data=effsC, colour="grey80", alpha=.3 )+
   geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsC)+
   # geom_point(aes(y=IR, x=White, color=Treatment), size= 2, data=DTpiles)+
   # scale_color_manual(values=qualcols, name = "Spruce Quality", guide=FALSE)+
-  scale_fill_manual(values=qualcols)+
-  labs(x = "Percent white", y = "Intake rate (g/kg/day)")+
-  theme(axis.title = element_text(size=14),
-        axis.text.x = element_text(size=10),
-        axis.text.y = element_text(size=10),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid = element_line(colour = "grey90", size = .3),
-        panel.border = element_rect(colour = "black", fill=NA, size=1)))
+  labs(x = "White (%)", y = "Intake rate (g/kg/day)")+
+  theme6)
 
+#plot that shows intake as a function of temperature with spruce quality
 (Temp<-ggplot()+
   geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group, fill=group),
               data=effsT, colour="grey80", alpha=.3 )+
   geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsT)+
   #geom_point(aes(y=IR, x=Low_temp, color=Treatment), size= 2, data=DTpiles)+
-  #scale_color_manual(values=qualcols, name = "Spruce Quality", guide=FALSE)+
-  scale_fill_manual(values=qualcols)+
+  # scale_color_manual(values=qualcols, name = "Spruce Quality", guide=FALSE)+
   labs(x = "Low ambient temperature (°C)", y = "Intake rate (g/kg/day)")+
-  theme(axis.title = element_text(size=14),
-        axis.text.x = element_text(size=10),
-        axis.text.y = element_text(size=10),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid = element_line(colour = "grey90", size = .3),
-        panel.border = element_rect(colour = "black", fill=NA, size=1)))
+  theme6)
 
-(Fig6<- Coat| Temp + plot_layout(guides = 'collect'))
+(Fig6<- (Coat + Temp & scale_fill_manual(values=qualcols, name = "Spruce quality")) + plot_layout(guides = 'collect'))
 ggsave(filename="Findings/Figure6.jpeg", Fig6, width = 7, height = 7, units = "in")
 
 
