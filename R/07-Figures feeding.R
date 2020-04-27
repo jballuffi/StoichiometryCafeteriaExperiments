@@ -24,7 +24,7 @@ theme4 <- theme(axis.title = element_text(size=14),
 (Intake<-ggplot(data=DTtrials)+
   geom_boxplot(position="dodge", aes(y=IR, x=Trial), outlier.shape = NA)+
   geom_jitter(aes(y=IR, x=Trial), width=.25, size=3)+
-  labs(y="Intake Rate (g/kg/day)", x=" ")+
+  labs(y="Spruce intake rate (g/kg/day)", x=" ")+
   ggtitle("A")+
   theme4)
 
@@ -32,7 +32,7 @@ theme4 <- theme(axis.title = element_text(size=14),
   geom_hline(yintercept=0, size=1.2, color="grey40", linetype="dashed")+
   geom_boxplot(position="dodge", aes(y=Diff_IR, x=Trial), outlier.shape = NA)+
   geom_jitter(aes(y=Diff_IR, x=Trial), width=.25, size=3)+
-  labs(y="Preference for High Ranked Spruce", x=" ")+
+  labs(y="Preference for high-quality spruce", x=" ")+
   ggtitle("B")+
   theme4)
 
@@ -40,7 +40,7 @@ theme4 <- theme(axis.title = element_text(size=14),
   geom_hline(yintercept=0, size=1.2, color="grey40", linetype="dashed")+
   geom_boxplot(position="dodge", aes(y=Mass_change, x=Trial), outlier.shape = NA)+
   geom_jitter(aes(y=Mass_change, x=Trial), width=.25, size=3)+
-  labs(y="Change in body mass (% lost)", x="Trial Number")+
+  labs(y="Lost body mass (%)", x="Trial Number")+
   ggtitle("C")+
   theme4)
 
@@ -64,14 +64,14 @@ theme5 <- theme(axis.title.y = element_text(size=14),
 (boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
    geom_boxplot(position="dodge", notch=FALSE)+ 
    geom_jitter( width=.25, size=3)+
-   labs(y="Intake Rate (g/kg/day)", x="Nutritional Rank")+
+   labs(y="Spruce intake rate (g/kg/day)", x="Spruce quality")+
    ggtitle("A")+
    theme5)
 
 #path plot that matches boxplot
 (pathplot<-ggplot(data=DTpiles)+
     geom_path(aes(y=IR, x=Treatment, group=sampleID), size=1)+
-    labs(y=" ", x="Nutritional Rank")+
+    labs(y=" ", x="Spruce quality")+
     ggtitle("B")+
     theme5)
 
@@ -96,7 +96,7 @@ theme6 <- theme(axis.title = element_text(size=14),
   geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsC)+
   # geom_point(aes(y=IR, x=White, color=Treatment), size= 2, data=DTpiles)+
   # scale_color_manual(values=qualcols, name = "Spruce Quality", guide=FALSE)+
-  labs(x = "White (%)", y = "Intake rate (g/kg/day)")+
+  labs(x = "White (%)", y = "Spruce intake rate (g/kg/day)")+
   theme6)
 
 #plot that shows intake as a function of temperature with spruce quality
@@ -106,11 +106,11 @@ theme6 <- theme(axis.title = element_text(size=14),
   geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsT)+
   #geom_point(aes(y=IR, x=Low_temp, color=Treatment), size= 2, data=DTpiles)+
   # scale_color_manual(values=qualcols, name = "Spruce Quality", guide=FALSE)+
-  labs(x = "Low ambient temperature (°C)", y = "Intake rate (g/kg/day)")+
+  labs(x = "Low ambient temperature (°C)", y = " ")+
   theme6)
 
 (Fig6<- (Coat + Temp & scale_fill_manual(values=qualcols, name = "Spruce quality")) + plot_layout(guides = 'collect'))
-ggsave(filename="Findings/Figure6.jpeg", Fig6, width = 7, height = 7, units = "in")
+ggsave(filename="Findings/Figure6.jpeg", Fig6, width = 9, height = 4.5, units = "in")
 
 
 ### Figure 7 ###
@@ -120,7 +120,7 @@ ggsave(filename="Findings/Figure6.jpeg", Fig6, width = 7, height = 7, units = "i
     geom_point(aes(y=Mass_change, x=Diff_IR),  size=3, colour="grey20")+
     geom_abline(intercept = 0.06, slope = -0.0003809, size=1.2)+
     geom_vline(xintercept=0, size=1.2, color="grey40", linetype="dashed")+
-    labs(x="Preference for high ranked spruce", y="Weight lost during trial (%)")+
+    labs(x="Preference for high-quality spruce", y="Lost body mass(%)")+
     theme(axis.title = element_text(size=14),
           axis.text.x = element_text(size=10),
           axis.text.y = element_text(size=10),
