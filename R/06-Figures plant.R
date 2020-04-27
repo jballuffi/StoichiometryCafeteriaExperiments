@@ -19,11 +19,29 @@ gridN<-readRDS("Input/Bloomfield_N.rds")
 gridP<-readRDS("Input/Bloomfield_P.rds")
 gridPSC<-readRDS("Input/Bloomfield_PSC.rds")
 
-
+#blanktheme
+themeblank <- theme(axis.title = element_text(size=14),
+                    axis.text.x = element_text(size=8),
+                    axis.text.y = element_text(size=8),
+                    legend.key = element_blank(),
+                    panel.background = element_blank(),
+                    panel.border = element_rect(colour = "black", fill=NA, size=1),
+                    legend.position = "right",
+                    legend.direction = "vertical",
+                    legend.text = element_text(size=9),
+                    legend.title = element_text(size=11))
 
 #### FIGURE 1 ####
 
 TrapShapes<-c("Sampled"=16, "Interpolated"=9, "Offered"=8)
+thememap <- theme(axis.text= element_blank(),
+                  axis.ticks = element_blank(),
+                  axis.title = element_blank(),
+                  panel.background = element_blank(),
+                  panel.border = element_blank(),
+                  legend.key.size = unit(.75, "line"),
+                  legend.key = element_blank(),
+                  legend.position = "right")
 
 (Nmap<-ggplot(data=gridN) + 
     geom_raster(aes(x=x, y=y, fill=N))+
@@ -31,14 +49,7 @@ TrapShapes<-c("Sampled"=16, "Interpolated"=9, "Offered"=8)
     ggtitle("A) Nitrogen")+
     geom_point(aes(POINT_X, POINT_Y, shape=Sampling), color="black", data = DTtraps, size=3)+
     scale_shape_manual(values=TrapShapes, name="Site Status")+
-    theme(axis.text= element_blank(),
-          axis.ticks = element_blank(),
-          axis.title = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_blank(),
-          legend.key.size = unit(.75, "line"),
-          legend.key = element_blank(),
-          legend.position = "right"))
+    thememap)
 
 (Pmap<-ggplot(data=gridP) + 
     geom_raster(aes(x=x, y=y, fill=P))+
@@ -46,14 +57,7 @@ TrapShapes<-c("Sampled"=16, "Interpolated"=9, "Offered"=8)
     geom_point(aes(POINT_X, POINT_Y, shape=Sampling), color="black", data = DTtraps, size=3)+
     scale_shape_manual(values=TrapShapes, name="Site Status")+
     ggtitle("B) Phosphorus")+
-    theme(axis.text = element_blank(),
-          axis.ticks = element_blank(),
-          axis.title = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_blank(),
-          legend.key = element_blank(),
-          legend.key.size = unit(.75, "line"),
-          legend.position = "right"))
+    thememap)
 
 (PSCmap<-ggplot(data=gridPSC) + 
     geom_raster(aes(x=x, y=y, fill=PSC))+
@@ -61,14 +65,7 @@ TrapShapes<-c("Sampled"=16, "Interpolated"=9, "Offered"=8)
     geom_point(aes(POINT_X, POINT_Y, shape=Sampling), color="black", data = DTtraps, size=3)+
     scale_shape_manual(values=TrapShapes, name="Site Status")+
     ggtitle("C) Plant Secondary Compounds")+
-    theme(axis.text = element_blank(),
-          axis.ticks = element_blank(),
-          axis.title = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_blank(),
-          legend.key = element_blank(),
-          legend.key.size = unit(.75, "line"),
-          legend.position = "right"))
+    thememap)
 
 Fig1 <- Nmap / Pmap / PSCmap + plot_layout(guides = 'collect')
 ggsave(filename="Findings/Figure1.jpeg", Fig1, width = 4.75, height = 8.5, units = "in")
@@ -86,16 +83,7 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
     geom_text(aes(.8, .19, label="R2 = 0.43"), size=4)+
     labs(y="% Phosphorus", x="% Nitrogen")+
     ggtitle("A")+
-    theme(axis.title=element_text(size=14),
-          axis.text.x = element_text(size=8),
-          axis.text.y = element_text(size=8),
-          legend.key = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_rect(colour = "black", fill=NA, size=1),
-          legend.position = "right",
-          legend.direction = "vertical",
-          legend.text = element_text(size=9),
-          legend.title = element_text(size=11)))
+    themeblank)
 
 (NPSCscatter<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=N, shape=Sampling), size=3)+
@@ -105,16 +93,7 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
     geom_text(aes(1.27, 24, label="R2 = 0.20"), size=4)+
     labs(y="PSC", x="% Nitrogen")+
     ggtitle("B")+
-    theme(axis.title=element_text(size=14),
-          axis.text.x = element_text(size=8),
-          axis.text.y = element_text(size=8),
-          legend.key = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_rect(colour = "black", fill=NA, size=1),
-          legend.position = "right",
-          legend.direction = "vertical",
-          legend.text = element_text(size=9),
-          legend.title = element_text(size=11)))
+    themeblank)
 
 (PPSCscatter<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=P, shape=Sampling), size=3)+
@@ -124,16 +103,7 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
     geom_text(aes(.115, 24, label="R2 = 0.14"), size=4)+
     labs(y="PSC", x="% Phosphorus")+
     ggtitle("C")+
-    theme(axis.title=element_text(size=14),
-          axis.text.x = element_text(size=8),
-          axis.text.y = element_text(size=8),
-          legend.key = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_rect(colour = "black", fill=NA, size=1),
-          legend.position = "right",
-          legend.direction = "vertical",
-          legend.text = element_text(size=9),
-          legend.title = element_text(size=11)))
+    themeblank)
 
 Fig2 <- NPscatter / NPSCscatter / PPSCscatter + plot_layout(guides = 'collect')
 ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units = "in")
@@ -147,16 +117,7 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units
    geom_text(aes(5, 1.35, label="p = 0.36"), size=5)+
    labs(x=NULL, y="% Nitrogen")+
    ggtitle("A")+
-   theme(axis.title=element_text(size=14),
-         axis.text.x = element_text(size=8),
-         axis.text.y = element_text(size=8),
-         legend.key = element_blank(),
-         panel.background = element_blank(),
-         panel.border = element_rect(colour = "black", fill=NA, size=1),
-         legend.position = "right",
-         legend.direction = "vertical",
-         legend.text = element_text(size=9),
-         legend.title = element_text(size=11)))
+   themeblank)
 
 (CanopyN<-ggplot(data=DTtraps2)+
     geom_point(aes(y=N, x=CanopyClosure), size = 3)+
@@ -165,32 +126,14 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units
     geom_text(aes(25, 1.25, label="t = 3.09, p < 0.01"), size=5)+
     labs(x=NULL, y=NULL)+
     ggtitle("B")+
-    theme(axis.title=element_text(size=14),
-          axis.text.x = element_text(size=8),
-          axis.text.y = element_text(size=8),
-          legend.key = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_rect(colour = "black", fill=NA, size=1),
-          legend.position = "right",
-          legend.direction = "vertical",
-          legend.text = element_text(size=9),
-          legend.title = element_text(size=11)))
+    themeblank)
 
 (DBHP<-ggplot(data=DTtraps2)+
     geom_point(aes(y=P, x=AvgDBH), size = 3)+
     geom_text(aes(5, .2, label="p = 0.69"), size=5)+
     labs(x="Mean DBH (cm)", y="% Phosphorus")+
     ggtitle("C")+
-    theme(axis.title=element_text(size=14),
-          axis.text.x = element_text(size=8),
-          axis.text.y = element_text(size=8),
-          legend.key = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_rect(colour = "black", fill=NA, size=1),
-          legend.position = "right",
-          legend.direction = "vertical",
-          legend.text = element_text(size=9),
-          legend.title = element_text(size=11)))
+    themeblank)
 
 (CanopyP<-ggplot(data=DTtraps2)+
     geom_point(aes(y=P, x=CanopyClosure), size = 3)+
@@ -199,16 +142,7 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units
     geom_text(aes(26, .185, label="t = 3.041, p < 0.01"), size=5)+
     labs(x="Canopy Closure (%)", y=NULL)+
     ggtitle("D")+
-    theme(axis.title=element_text(size=14),
-          axis.text.x = element_text(size=8),
-          axis.text.y = element_text(size=8),
-          legend.key = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_rect(colour = "black", fill=NA, size=1),
-          legend.position = "right",
-          legend.direction = "vertical",
-          legend.text = element_text(size=9),
-          legend.title = element_text(size=11)))
+    themeblank)
 
 (DBHPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=AvgDBH), size = 3)+
@@ -217,16 +151,7 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units
     geom_abline(aes(intercept=24.38, slope=-0.42), size=1.2, colour="grey20")+
     labs(x="Mean DBH (cm)", y="PSC")+
     ggtitle("E")+
-    theme(axis.title=element_text(size=14),
-          axis.text.x = element_text(size=8),
-          axis.text.y = element_text(size=8),
-          legend.key = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_rect(colour = "black", fill=NA, size=1),
-          legend.position = "right",
-          legend.direction = "vertical",
-          legend.text = element_text(size=9),
-          legend.title = element_text(size=11)))
+    themeblank)
 
 (CanopyPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=CanopyClosure), size = 3)+
@@ -235,16 +160,7 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units
     geom_text(aes(24, 13, label="t = -2.44, p =0.02"), size=5)+
     labs(x="Canopy Closure (%)", y=NULL)+
     ggtitle("F")+
-    theme(axis.title=element_text(size=14),
-          axis.text.x = element_text(size=8),
-          axis.text.y = element_text(size=8),
-          legend.key = element_blank(),
-          panel.background = element_blank(),
-          panel.border = element_rect(colour = "black", fill=NA, size=1),
-          legend.position = "right",
-          legend.direction = "vertical",
-          legend.text = element_text(size=9),
-          legend.title = element_text(size=11)))
+    themeblank)
 
 
 Fig3<-ggarrange(DBHN, CanopyN, DBHP, CanopyP, DBHPSC, CanopyPSC, ncol=2, nrow=3)
