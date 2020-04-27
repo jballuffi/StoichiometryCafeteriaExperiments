@@ -1,4 +1,4 @@
-libs<-c("data.table",'stargazer', 'AICcmodavg', 'ggplot2','RColorBrewer','lme4','pwr','MuMIn','nlme', 'effects', 'arm', 'rsq')
+libs<-c("data.table",'stargazer', 'AICcmodavg', 'ggplot2','RColorBrewer','lme4','pwr','MuMIn','nlme', 'ggeffects', 'arm', 'rsq')
 lapply(libs, require, character.only = TRUE)
 
 #Import caf experiments in pile format
@@ -63,9 +63,9 @@ r.squaredGLMM(Choice.Mod[[9]]) #Full
 
 
 #to get effects for the coat colour in the energetics model
-effsC <- as.data.table(effect(c("White"), xlevels=15, Choice.Mod[[5]]))
+effsC<-ggpredict(Choice.Mod[[5]], terms = c("White", "Treatment"))
 #to get the effects for the temperature in the energetic model
-effsT <- as.data.table(effect(c("Low_temp"), xlevels=15, Choice.Mod[[5]]))
+effsT<-ggpredict(Choice.Mod[[5]], terms = c("Low_temp", "Treatment"))
 
 
 #Same models but diff function
