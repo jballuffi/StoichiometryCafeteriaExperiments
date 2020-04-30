@@ -8,30 +8,38 @@ DTtraps<-readRDS("Input/all_trap_locs.rds")
 #clean DTtraps for summary stats
 DTtraps<-DTtraps[!Sampling=="Interpolated"]
 
-#summary stats for the trapping grid
+#summary stats for grid plant data
 #for nitrogen
 DTtraps[,mean(N)]
 DTtraps[,max(N)]
 DTtraps[,min(N)]
 DTtraps[,sd(N)]
-DTtraps[Rank=="High", median(N)]
-DTtraps[Rank=="Low", median(N)]
+DTtraps[, median(N), by = Rank]
+DTtraps[, sd(N), by = Rank]
 
 #for phosphorus
 DTtraps[,mean(P)]
 DTtraps[,max(P)]
 DTtraps[,min(P)]
 DTtraps[,sd(P)]
-DTtraps[Rank=="High", median(P)]
-DTtraps[Rank=="Low", median(P)]
+DTtraps[, median(P), by = Rank]
+DTtraps[, sd(P), by = Rank]
+
+#for carbon
+DTtraps[,mean(TC)]
+DTtraps[,max(TC)]
+DTtraps[,min(TC)]
+DTtraps[,sd(TC)]
+DTtraps[, median(TC), by = Rank]
+DTtraps[, sd(TC), by = Rank]
 
 #for secondary compounds
 DTtraps[,mean(PSC)]
 DTtraps[,max(PSC)]
 DTtraps[,min(PSC)]
 DTtraps[,sd(PSC)]
-DTtraps[Rank=="High", median(PSC)]
-DTtraps[Rank=="Low", median(PSC)]
+DTtraps[, median(PSC), by = Rank]
+DTtraps[, sd(PSC), by = Rank]
 
 
 #for canopy cover
@@ -39,12 +47,16 @@ DTtraps[,mean(CanopyClosure)]
 DTtraps[,max(CanopyClosure)]
 DTtraps[,min(CanopyClosure)]
 DTtraps[,sd(CanopyClosure)]
+DTtraps[, median(CanopyClosure), by = Rank]
+DTtraps[, sd(CanopyClosure), by = Rank]
 
 #for DBH
 DTtraps[,mean(AvgDBH)]
 DTtraps[,max(AvgDBH)]
 DTtraps[,min(AvgDBH)]
 DTtraps[,sd(AvgDBH)]
+DTtraps[, median(AvgDBH), by = Rank]
+DTtraps[, sd(AvgDBH), by = Rank]
 
 
 #correlation between N and P across the grid
