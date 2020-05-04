@@ -1,4 +1,4 @@
-libs<-c("data.table",'stargazer', 'AICcmodavg', 'ggplot2','RColorBrewer','lme4','pwr','MuMIn','nlme', 'effects', 'arm', 'rsq')
+libs<-c("data.table",'stargazer', 'AICcmodavg', 'ggplot2','RColorBrewer','lme4','pwr','MuMIn','nlme', 'ggeffects', 'arm', 'rsq')
 lapply(libs, require, character.only = TRUE)
 
 #import trial format
@@ -14,21 +14,21 @@ Choice.Mod<-list()
 #1 = Null model
 Choice.Mod[[1]]<-lm(Mass_change ~ 1, data = DTtrials)
 #2 = Base model
-Choice.Mod[[2]]<-lm(Mass_change ~ Diff_IR, data = DTtrials)
+Choice.Mod[[2]]<-lm(Mass_change ~ IR + Diff_IR, data = DTtrials)
 #3 = Temperature model
-Choice.Mod[[3]]<- lm(Mass_change ~ Low_temp*Diff_IR, data = DTtrials)
+Choice.Mod[[3]]<- lm(Mass_change ~ IR + Low_temp*Diff_IR, data = DTtrials)
 #4 = Coat Color model
-Choice.Mod[[4]]<- lm(Mass_change ~ White*Diff_IR, data = DTtrials)
+Choice.Mod[[4]]<- lm(Mass_change ~ IR + White*Diff_IR, data = DTtrials)
 #5 = Energetic model 
-Choice.Mod[[5]]<- lm(Mass_change ~ White*Diff_IR + Low_temp*Diff_IR, data = DTtrials)
+Choice.Mod[[5]]<- lm(Mass_change ~ IR + White*Diff_IR + Low_temp*Diff_IR, data = DTtrials)
 #6 = Nitrogen model
-Choice.Mod[[6]]<- lm(Mass_change ~ N_mean*Diff_IR, data = DTtrials)
+Choice.Mod[[6]]<- lm(Mass_change ~ IR + N_mean*Diff_IR, data = DTtrials)
 #7 = Phosphorus model
-Choice.Mod[[7]]<- lm(Mass_change ~ P_mean*Diff_IR, data = DTtrials)
+Choice.Mod[[7]]<- lm(Mass_change ~ IR + P_mean*Diff_IR, data = DTtrials)
 #8 = Nutrient model
-Choice.Mod[[8]]<- lm(Mass_change ~ N_mean*Diff_IR + P_mean*Diff_IR, data = DTtrials)
+Choice.Mod[[8]]<- lm(Mass_change ~ IR + N_mean*Diff_IR + P_mean*Diff_IR, data = DTtrials)
 #9 = Full model
-Choice.Mod[[9]]<- lm(Mass_change ~ White*Diff_IR + Low_temp*Diff_IR + N_mean*Diff_IR + P_mean*Diff_IR, data = DTtrials)
+Choice.Mod[[9]]<- lm(Mass_change ~ IR + White*Diff_IR + Low_temp*Diff_IR + N_mean*Diff_IR + P_mean*Diff_IR, data = DTtrials)
 
 #create a vector of names to trace back models in set 
 Modnames <- paste("mod", 1:length(Choice.Mod), sep = " ")
@@ -64,7 +64,7 @@ r.squaredGLMM(Choice.Mod[[8]]) #Nutrient
 r.squaredGLMM(Choice.Mod[[9]]) #Full
 
 #to get effects for weightloss~preference
-effsP <- as.data.table(effect(c("Diff_IR"), xlevels=15, Choice.Mod[[2]]))
+effsP <- ggpredict(Choice.Mod[[2]], terms = c("Diff_IR"))
 
 #saving the effects
 saveRDS(effsP, "Input/effects_pref.rds")
@@ -83,7 +83,8 @@ stargazer(Choice.Mod,
           type="html",
           out="Findings/table8.html",
           digits = 2,
-          column.labels = c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full")
+          column.labels = c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full"),
+          float.env = "sidewaystable"
           # dep.var.labels = "Grams of Spruce Pile Consumed"
 )
 
