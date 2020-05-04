@@ -52,19 +52,34 @@ summary(Choice.Mod[[7]]) #Phosphorus
 summary(Choice.Mod[[8]]) #Nutrient
 summary(Choice.Mod[[9]]) #Full
 
-#individual model R2 outputs
-r.squaredGLMM(Choice.Mod[[1]]) #Null
-r.squaredGLMM(Choice.Mod[[2]]) #Base
-r.squaredGLMM(Choice.Mod[[3]]) #Temp
-r.squaredGLMM(Choice.Mod[[4]]) #Coat
-r.squaredGLMM(Choice.Mod[[5]]) #Energetic
-r.squaredGLMM(Choice.Mod[[6]]) #Nitrogen
-r.squaredGLMM(Choice.Mod[[7]]) #Phosphorus
-r.squaredGLMM(Choice.Mod[[8]]) #Nutrient
-r.squaredGLMM(Choice.Mod[[9]]) #Full
-
 #to get effects for weightloss~preference
 effsP <- ggpredict(Choice.Mod[[2]], terms = c("Diff_IR"))
+
+#Function to collect coefficients, standard errors, and R2s for every model
+outputfun <- function(model) {
+  #collect coef values
+  coefOut <- data.table(t(coef(model)))
+  coefOut<-round(coefOut,3)
+  #collect standard errors
+  seOut <- data.table(t(se.coef(model)))
+  seOut<-round(seOut,3)
+  #Paste coef and standard errors together, rename cols
+  coefse<-data.table(t(paste(coefOut, seOut, sep="±")))
+  setnames(coefse, paste0(colnames(coefOut)))
+  #collect R2s and change column name
+  rsqOut <- data.table(rsq(model))
+  names(rsqOut)<-c("rsq")
+  #return each datatable binded together by row
+  return(data.table(coefse, rsqOut))
+}
+
+#apply to same list of models as in AIC
+OutAll<-lapply(Choice.Mod, outputfun)
+OutAll<-rbindlist(OutAll, fill = TRUE)
+#make srting of model names for model column
+ModelNames<-c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full")
+OutAll$Model<-ModelNames
+
 
 #saving the effects
 saveRDS(effsP, "Input/effects_pref.rds")
@@ -74,17 +89,16 @@ saveRDS(effsP, "Input/effects_pref.rds")
 #table 6
 fwrite(AIC, "Findings/Table6.csv")     ###Saving the AIC table
 
-#table 7 information
-summary(Choice.Mod[[2]])                  
+#table 7
+fwrite(OutAll, "Findings/Table7.csv")
+                
 
-
-#table 8: all models
+#Another option for table 7
 stargazer(Choice.Mod,
           type="html",
-          out="Findings/table8.html",
+          out="Findings/table7.html",
           digits = 2,
           column.labels = c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full"),
           float.env = "sidewaystable"
           # dep.var.labels = "Grams of Spruce Pile Consumed"
 )
-

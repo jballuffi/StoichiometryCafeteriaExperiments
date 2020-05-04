@@ -38,34 +38,34 @@ AIC[Modnames=="mod 4", Model:="Coat Colour"][Modnames=="mod 5", Model:="Energeti
 AIC[Modnames=="mod 7", Model:="Phosphorus"][Modnames=="mod 8", Model:="Nutrient"][Modnames=="mod 9", Model:="Full"]
 AIC[, Modnames:=NULL]
 
-
-#individual model summary outputs
-summary(Choice.Mod[[1]]) #Null
-summary(Choice.Mod[[2]]) #Base
-summary(Choice.Mod[[3]]) #Temp
-summary(Choice.Mod[[4]]) #Coat
-summary(Choice.Mod[[5]]) #Energetic
-summary(Choice.Mod[[6]]) #Nitrogen
-summary(Choice.Mod[[7]]) #Phosphorus
-summary(Choice.Mod[[8]]) #Nutrient
-summary(Choice.Mod[[9]]) #Full
-
-#individual model R2 outputs
-r.squaredGLMM(Choice.Mod[[1]]) #Null
-r.squaredGLMM(Choice.Mod[[2]]) #Base
-r.squaredGLMM(Choice.Mod[[3]]) #Temp
-r.squaredGLMM(Choice.Mod[[4]]) #Coat
-r.squaredGLMM(Choice.Mod[[5]]) #Energetic
-r.squaredGLMM(Choice.Mod[[6]]) #Nitrogen
-r.squaredGLMM(Choice.Mod[[7]]) #Phosphorus
-r.squaredGLMM(Choice.Mod[[8]]) #Nutrient
-r.squaredGLMM(Choice.Mod[[9]]) #Full
-
-
 #to get effects for the coat colour in the energetics model
 effsC<-ggpredict(Choice.Mod[[5]], terms = c("White", "Treatment"))
 #to get the effects for the temperature in the energetic model
 effsT<-ggpredict(Choice.Mod[[5]], terms = c("Low_temp", "Treatment"))
+
+#Function to collect coefficients, standard errors, and R2s for every model
+outputfun <- function(model) {
+  #collect coef values
+  coefOut <- data.table(t(fixef(model)))
+  coefOut<-round(coefOut,3)
+  #collect standard errors
+  seOut <- data.table(t(se.fixef(model)))
+  seOut<-round(seOut,3)
+  #Paste coef and standard errors together, rename cols
+  coefse<-data.table(t(paste(coefOut, seOut, sep="±")))
+  setnames(coefse, paste0(colnames(coefOut)))
+  #collect R2s
+  rsqOut <- data.table(r.squaredGLMM(model))
+  #return each datatable binded together by row
+  return(data.table(coefse, rsqOut))
+}
+
+#apply to same list of models as in AIC
+OutAll<-lapply(Choice.Mod, outputfun)
+OutAll<-rbindlist(OutAll, fill = TRUE)
+#make srting of model names for model column
+ModelNames<-c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full")
+OutAll$Model<-ModelNames
 
 
 #Same models but diff function
@@ -95,11 +95,11 @@ saveRDS(effsT, "Input/effects_temp.rds")
 
 #### Saving tables
 
-#table 3
-fwrite(AIC, "Findings/Table3.csv")     ###Saving the AIC table
+#table 4
+fwrite(AIC, "Findings/Table4.csv")     ###Saving the AIC table
 
-#table 4 information
-summary(Energetic2)                  
+#table 5
+fwrite(OutAll, "Findings/Table5.csv")
 
 
 #table 5: all models
