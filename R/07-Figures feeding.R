@@ -1,4 +1,4 @@
-libs<-c('dplyr', 'data.table','sf', 'rgdal','raster','sp', 'ggplot2','RColorBrewer', 'ggpubr', 'effects', 'patchwork')
+libs<-c('dplyr', 'data.table','sf', 'rgdal','raster','sp', 'ggplot2','RColorBrewer', 'ggpubr', 'ggeffects', 'patchwork')
 lapply(libs, require, character.only = TRUE)
 utm21N <- '+proj=longlat +zone=21 ellps=WGS84'
 
@@ -109,9 +109,10 @@ ggsave(filename="Findings/Figure6.jpeg", Fig6, width = 9, height = 4.5, units = 
 ### Figure 7 ###
 
 (Fig7<-ggplot(DTtrials)+
-    geom_ribbon(aes(x=Diff_IR, ymin=lower, ymax=upper), data=effsP, colour="grey80", alpha=.3 )+
+    geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group),
+                data=effsP, colour="grey80", alpha=.3 )+
     geom_point(aes(y=Mass_change, x=Diff_IR),  size=3, colour="grey20")+
-    geom_abline(intercept = 0.06, slope = -0.0003809, size=1.2)+
+    geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsP)+
     geom_vline(xintercept=0, size=1.2, color="grey40", linetype="dashed")+
     labs(x="Preference for high-quality spruce", y="Lost body mass(%)")+
     themeblank)
@@ -128,7 +129,7 @@ summary(lm(Diff_IR~IR, data=DTtrials))
 (Fig8<-ggplot(data=DTtrials)+
   geom_abline(intercept=1.13, slope=0.038, size=1.2)+
   geom_point(aes(y=Diff_IR, x=IR), size=4, colour="grey20")+
-  themeblank
+  themeblank)
 
 
 
