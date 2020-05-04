@@ -24,7 +24,7 @@ utm21N <- '+proj=longlat +zone=21 ellps=WGS84'
 #import raster layers for bloomfield N, P, and secondary compounds and project correctly
 bloomN<-raster("Input/PIMA_N.tif")
 bloomP<-raster("Input/PIMA_P.tif")
-bloomPSC<-raster("Input/bS_Phyto_BL_EBKRP_Terpene.tif")
+bloomPSC<-raster("Input/terpene_idw.tif")
 bloomN<-projectRaster(bloomN,crs=utm21N)
 bloomP<-projectRaster(bloomP,crs=utm21N)
 bloomPSC<-projectRaster(bloomPSC,crs=utm21N)
@@ -41,7 +41,7 @@ setnames(gridP, "PIMA_P", "P")
 
 bloomPSC_points <- rasterToPoints(bloomPSC)
 gridPSC <- data.table(bloomPSC_points)
-setnames(gridPSC, "bS_Phyto_BL_EBKRP_Terpene", "PSC")
+setnames(gridPSC, "terpene_idw", "PSC")
 
 
   #import the grid shapefile, get rid of other 3 grid locations
