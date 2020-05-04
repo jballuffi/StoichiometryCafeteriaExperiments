@@ -61,7 +61,7 @@ thememap <- theme(axis.text= element_blank(),
 
 (PSCmap<-ggplot(data=gridPSC) + 
     geom_raster(aes(x=x, y=y, fill=PSC))+
-    scale_fill_gradient(high="yellow", low="darkgreen", name="Total PSC")+
+    scale_fill_gradient(high="yellow", low="darkgreen", name="Total terpene (mg/g)")+
     geom_point(aes(POINT_X, POINT_Y, shape=Sampling), color="black", data = DTtraps, size=3)+
     scale_shape_manual(values=TrapShapes, name="Site Status")+
     ggtitle("C) Plant Secondary Compounds")+
@@ -88,20 +88,20 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
 (NPSCscatter<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=N, shape=Sampling), size=3)+
     scale_shape_manual(values=TrapShapes2, name="Site Status")+
-    geom_abline(intercept = 24.761, slope = -7.56)+
-    geom_text(aes(1.27, 25, label="y = -7.6x + 24.8"), size=4)+
-    geom_text(aes(1.27, 24, label="R2 = 0.20"), size=4)+
-    labs(y="PSC", x="% Nitrogen")+
+    geom_abline(intercept = 28.09, slope = -10.74)+
+    geom_text(aes(1.27, 30, label="y = -10.74x + 28.09"), size=4)+
+    geom_text(aes(1.27, 28, label="R2 = 0.17"), size=4)+
+    labs(y="Terpene content (mg/g)", x="% Nitrogen")+
     ggtitle("B")+
     themeblank)
 
 (PPSCscatter<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=P, shape=Sampling), size=3)+
     scale_shape_manual(values=TrapShapes, name="Site Status")+
-    geom_abline(intercept = 21.74, slope = -32.95)+
-    geom_text(aes(.115, 25, label="y = -33.0x + 21.7"), size=4)+
-    geom_text(aes(.115, 24, label="R2 = 0.14"), size=4)+
-    labs(y="PSC", x="% Phosphorus")+
+    geom_abline(intercept = 21.93, slope = -33.61)+
+    geom_text(aes(.115, 31, label="y = -33.6x + 21.9"), size=4)+
+    geom_text(aes(.115, 29, label="R2 = 0.059"), size=4)+
+    labs(y="Terpene content (mg/g)", x="% Phosphorus")+
     ggtitle("C")+
     themeblank)
 
@@ -131,7 +131,7 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units
 (DBHP<-ggplot(data=DTtraps2)+
     geom_point(aes(y=P, x=AvgDBH), size = 3)+
     geom_text(aes(5, .2, label="p = 0.69"), size=5)+
-    labs(x="Mean DBH (cm)", y="% Phosphorus")+
+    labs(x=NULL, y="% Phosphorus")+
     ggtitle("C")+
     themeblank)
 
@@ -140,24 +140,24 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units
     geom_abline(aes(intercept=0.098, slope=0.00068), size=1.2, colour="grey20")+
     geom_text(aes(33, .2, label="y = 0.098x + 0.000682"), size=5)+
     geom_text(aes(26, .185, label="t = 3.041, p < 0.01"), size=5)+
-    labs(x="Canopy Closure (%)", y=NULL)+
+    labs(x=NULL, y=NULL)+
     ggtitle("D")+
     themeblank)
 
 (DBHPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=AvgDBH), size = 3)+
-    geom_text(aes(11, 25.2, label="y = -0.42x + 24.4"), size=5)+
-    geom_text(aes(11, 24, label="t = -1.85, p = 0.07"), size=5)+
-    geom_abline(aes(intercept=24.38, slope=-0.42), size=1.2, colour="grey20")+
+    geom_text(aes(11, 30, label="y = -0.29x + 24.01"), size=5)+
+    geom_text(aes(11, 28, label="t = -0.708, p = 0.48"), size=5)+
+    geom_abline(aes(intercept=24.01, slope=-0.29), size=1.2, colour="grey20")+
     labs(x="Mean DBH (cm)", y="PSC")+
     ggtitle("E")+
     themeblank)
 
 (CanopyPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=CanopyClosure), size = 3)+
-    geom_abline(aes(intercept=24.38, slope=-0.045), size=1.2, colour="grey20")+
-    geom_text(aes(26, 14,  label="y = 0.098x + 0.000682"), size=5)+
-    geom_text(aes(24, 13, label="t = -2.44, p =0.02"), size=5)+
+    geom_abline(aes(intercept=24.01, slope=-0.054), size=1.2, colour="grey20")+
+    geom_text(aes(26, 30,  label="y = -0.054x + 24.01"), size=5)+
+    geom_text(aes(24, 28, label="t = -1.64, p =0.11"), size=5)+
     labs(x="Canopy Closure (%)", y=NULL)+
     ggtitle("F")+
     themeblank)
