@@ -22,6 +22,7 @@ Mods<-list(Null, Base, Temp, Coat, Energetic, Nitrogen, Phosphorus, Nutrient, Fu
 Names<-c('Null', 'Base', 'Temp', 'Coat', 'Energetic', 'Nitrogen', 'Phosphorus', 'Nutrient', 'Full')
 AIC<-as.data.table(aictab(REML=F, cand.set = Mods, modnames = Names, sort = TRUE))
 AIC[,ModelLik:=NULL]
+AIC[,Cum.Wt:=NULL]
 
 #to get effects for the coat colour in the energetics model
 effsC<-ggpredict(Energetic, terms = c("White", "Treatment"))
@@ -50,9 +51,11 @@ outputfun <- function(model) {
 OutAll<-lapply(Mods, outputfun)
 OutAll<-rbindlist(OutAll, fill = TRUE)
 OutAll$Model<-Names
+#chaning some names in the output
 setnames(OutAll, "(Intercept)", "Intercept")
-setnames(OutAll, "HabituationHabituated", "Habituated")
+setnames(OutAll, "HabituationHabituated", "Habituation")
 
+#function to swap out specific words in column names for new ones
 nameswap <- function(old, new, Data) {
   older<-colnames(Data)[grep(old, colnames(Data))]
   newer <- gsub(old, new, older)
@@ -65,17 +68,22 @@ nameswap(old='Low_temp', new='Temp', Data=OutAll)
 nameswap(old='N_mean', new='N', Data=OutAll)
 nameswap(old='P_mean', new='P', Data=OutAll)
 
+####Combine interaction outputs whoe column names were reversed
 
+#grabbinging column names with a ":" i.e. interaction outputs
 oldcols <- colnames(OutAll)[grepl(':', colnames(OutAll))]
+#re-order the column names
 newcols <- vapply(strsplit(oldcols, ':'), function(x) paste0(sort(x), collapse = ':'), 
                   'potato')
 
+#function to merge two columns of the same interaction coef
 fix <- function(version1, version2, data) {
   coal <- coalesce(data[[version1]], data[[version2]])
   data[, (version1) := coal]
   data[, (version2) := NULL]
 }
 
+#apply fix function to the grabbed columns
 lapply(seq.int(oldcols), function(i){
   v1 <- newcols[[i]]
   v2 <- oldcols[[i]]
@@ -83,8 +91,16 @@ lapply(seq.int(oldcols), function(i){
     fix(v1, v2, OutAll)
   }
 })
-
-
+#now reorder the cols
+setcolorder(OutAll, c("Model", 
+                      "Intercept",
+                      "Habituation", 
+                      "Quality", 
+                      "Temp", "Quality:Temp", 
+                      "Coat", "Coat:Quality",
+                      "N", "N:Quality",
+                      "P", "P:Quality",
+                      "R2m","R2c"))
 
 
 #Saving effects into input folder
