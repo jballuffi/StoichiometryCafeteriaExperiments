@@ -1,92 +1,90 @@
-libs<-c("data.table",'stargazer', 'AICcmodavg', 'ggplot2','RColorBrewer','lme4','pwr','MuMIn','nlme', 'ggeffects', 'arm', 'rsq')
+libs<-c("data.table",'stargazer', 'AICcmodavg', 'ggplot2','RColorBrewer','lme4','pwr','MuMIn','nlme', 'ggeffects', 'arm', 'rsq', 'dplyr')
 lapply(libs, require, character.only = TRUE)
 
 #Import caf experiments in pile format
 DTpiles<-readRDS("Input/pile_format.rds")
 
 
-            #### Feeding AIC ####
+#### Feeding AIC ####
 
-Choice.Mod<-list()
+Null <- lmer(IR ~ Habituation + (1|sampleID) , REML=F, data=DTpiles)
+Base <- lmer(IR ~ Habituation + Treatment + (1|sampleID), REML=F, data=DTpiles)
+Temp <- lmer(IR ~ Habituation + Low_temp*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Coat <- lmer(IR ~ Habituation + White*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Energetic <- lmer(IR ~ Habituation + White*Treatment + Low_temp*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Nitrogen <- lmer(IR ~ Habituation + N_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Phosphorus <- lmer(IR ~ Habituation + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Nutrient <- lmer(IR ~ Habituation + N_mean*Treatment + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Full <- lmer(IR ~ Habituation + White*Treatment + Low_temp*Treatment + N_mean*Treatment + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
 
-#1 = Null model
-Choice.Mod[[1]]<-lmer(IR ~ Habituation + (1|sampleID) , REML=F, data=DTpiles)
-#2 = Base model
-Choice.Mod[[2]]<-lmer(IR ~ Habituation + Treatment + (1|sampleID), REML=F, data=DTpiles)
-#3 = Temperature model
-Choice.Mod[[3]]<-lmer(IR ~ Habituation + Low_temp*Treatment + (1|sampleID), REML=F, data=DTpiles)
-#4 = Coat Color model
-Choice.Mod[[4]]<-lmer(IR ~ Habituation + White*Treatment + (1|sampleID), REML=F, data=DTpiles)
-#5 = Energetic model 
-Choice.Mod[[5]]<-lmer(IR ~ Habituation + White*Treatment + Low_temp*Treatment + (1|sampleID), REML=F, data=DTpiles)
-#6 = Nitrogen model
-Choice.Mod[[6]]<-lmer(IR ~ Habituation + N_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
-#7 = Phosphorus model
-Choice.Mod[[7]]<-lmer(IR ~ Habituation + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
-#8 = Nutrient model
-Choice.Mod[[8]]<-lmer(IR ~ Habituation + N_mean*Treatment + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
-#9 = Full model
-Choice.Mod[[9]]<-lmer(IR ~ Habituation + White*Treatment + Low_temp*Treatment + N_mean*Treatment + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
-
-#create a vector of names to trace back models in set 
-Modnames <- paste("mod", 1:length(Choice.Mod), sep = " ")
-#produce AIC table that uses AICc, will be table1 in the paper
-AIC<-aictab(REML=F, cand.set = Choice.Mod, modnames = Modnames, sort = TRUE)
-AIC<-as.data.table(AIC)
-AIC[Modnames=="mod 1", Model:="Null"][Modnames=="mod 2", Model:="Base"][Modnames=="mod 3", Model:="Temperature"]
-AIC[Modnames=="mod 4", Model:="Coat Colour"][Modnames=="mod 5", Model:="Energetic"][Modnames=="mod 6", Model:="Nitrogen"]
-AIC[Modnames=="mod 7", Model:="Phosphorus"][Modnames=="mod 8", Model:="Nutrient"][Modnames=="mod 9", Model:="Full"]
-AIC[, Modnames:=NULL]
+#List and AIC
+Mods<-list(Null, Base, Temp, Coat, Energetic, Nitrogen, Phosphorus, Nutrient, Full)
+Names<-c('Null', 'Base', 'Temp', 'Coat', 'Energetic', 'Nitrogen', 'Phosphorus', 'Nutrient', 'Full')
+AIC<-as.data.table(aictab(REML=F, cand.set = Mods, modnames = Names, sort = TRUE))
+AIC[,ModelLik:=NULL]
 
 #to get effects for the coat colour in the energetics model
-effsC<-ggpredict(Choice.Mod[[5]], terms = c("White", "Treatment"))
+effsC<-ggpredict(Energetic, terms = c("White", "Treatment"))
 #to get the effects for the temperature in the energetic model
-effsT<-ggpredict(Choice.Mod[[5]], terms = c("Low_temp", "Treatment"))
+effsT<-ggpredict(Energetic, terms = c("Low_temp", "Treatment"))
 
 #Function to collect coefficients, standard errors, and R2s for every model
 outputfun <- function(model) {
   #collect coef values
   coefOut <- data.table(t(fixef(model)))
-  coefOut<-round(coefOut,3)
+  coefOut<-round(coefOut,2)
   #collect standard errors
   seOut <- data.table(t(se.fixef(model)))
-  seOut<-round(seOut,3)
+  seOut<-round(seOut,2)
   #Paste coef and standard errors together, rename cols
-  coefse<-data.table(t(paste(coefOut, seOut, sep="±")))
+  coefse<-data.table(t(paste(coefOut, seOut, sep=" ± ")))
   setnames(coefse, paste0(colnames(coefOut)))
   #collect R2s
   rsqOut <- data.table(r.squaredGLMM(model))
+  rsqOut<- round(rsqOut, 2)
   #return each datatable binded together by row
   return(data.table(coefse, rsqOut))
 }
 
 #apply to same list of models as in AIC
-OutAll<-lapply(Choice.Mod, outputfun)
+OutAll<-lapply(Mods, outputfun)
 OutAll<-rbindlist(OutAll, fill = TRUE)
-#make srting of model names for model column
-ModelNames<-c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full")
-OutAll$Model<-ModelNames
+OutAll$Model<-Names
+setnames(OutAll, "(Intercept)", "Intercept")
+setnames(OutAll, "HabituationHabituated", "Habituated")
+
+nameswap <- function(old, new, Data) {
+  older<-colnames(Data)[grep(old, colnames(Data))]
+  newer <- gsub(old, new, older)
+  setnames(Data, older, newer)
+}
+
+nameswap(old='TreatmentHigh', new='Quality', Data=OutAll)
+nameswap(old='White', new='Coat', Data=OutAll)
+nameswap(old='Low_temp', new='Temp', Data=OutAll)
+nameswap(old='N_mean', new='N', Data=OutAll)
+nameswap(old='P_mean', new='P', Data=OutAll)
 
 
-#Same models but diff function
-Null2<-lme(IR ~ 1, random=~1|sampleID, data=DTpiles)
-Base2<-lme(IR ~ Habituation + Treatment, random=~1|sampleID,  data=DTpiles)
-Temp2<-lme(IR ~ Habituation + Low_temp*Treatment, random=~1|sampleID,  data=DTpiles)
-Coat2<-lme(IR ~ Habituation + White*Treatment, random=~1|sampleID,  data=DTpiles)
-Energetic2<-lme(IR ~ Habituation + Low_temp*Treatment + White*Treatment, random=~1|sampleID,  data=DTpiles)
-Nitrogen2<-lme(IR ~ Habituation + N_mean*Treatment, random=~1|sampleID,  data=DTpiles)
-Phosphorus2<-lme(IR ~ Habituation + P_mean*Treatment, random=~1|sampleID,  data=DTpiles)
-Nutrient2<-lme(IR ~ Habituation + N_mean*Treatment + P_mean*Treatment, random=~1|sampleID,  data=DTpiles)
-Full2<-lme(IR ~ Habituation + White*Treatment + Low_temp*Treatment + N_mean*Treatment + P_mean*Treatment, random=~1|sampleID,  data=DTpiles)
+oldcols <- colnames(OutAll)[grepl(':', colnames(OutAll))]
+newcols <- vapply(strsplit(oldcols, ':'), function(x) paste0(sort(x), collapse = ':'), 
+                  'potato')
 
-summary(Base2)
-summary(Temp2)
-summary(Coat2)
-summary(Energetic2)
-summary(Nitrogen2)
-summary(Phosphorus2)
-summary(Nutrient2)
-summary(Full2)
+fix <- function(version1, version2, data) {
+  coal <- coalesce(data[[version1]], data[[version2]])
+  data[, (version1) := coal]
+  data[, (version2) := NULL]
+}
+
+lapply(seq.int(oldcols), function(i){
+  v1 <- newcols[[i]]
+  v2 <- oldcols[[i]]
+  if(v1 != v2){
+    fix(v1, v2, OutAll)
+  }
+})
+
+
 
 
 #Saving effects into input folder
@@ -103,7 +101,7 @@ fwrite(OutAll, "Findings/Table5.csv")
 
 
 #table 5: all models
-stargazer(Choice.Mod,
+stargazer(Mods,
           type="html",
           out="Findings/table5.html",
           digits = 2,
@@ -111,3 +109,15 @@ stargazer(Choice.Mod,
           # covariate.labels = c("Temp", "White", "N", "P", "Rank", "Temp*Rank", "White*Rank", "Temp*Rank", "N*Rank", "P*Rank", "N*Rank", "P*Rank"),
           # dep.var.labels = "Grams of Spruce Pile Consumed"
 )
+
+#Same models but diff function
+Null2<-lme(IR ~ 1, random=~1|sampleID, data=DTpiles)
+Base2<-lme(IR ~ Habituation + Treatment, random=~1|sampleID,  data=DTpiles)
+Temp2<-lme(IR ~ Habituation + Low_temp*Treatment, random=~1|sampleID,  data=DTpiles)
+Coat2<-lme(IR ~ Habituation + White*Treatment, random=~1|sampleID,  data=DTpiles)
+Energetic2<-lme(IR ~ Habituation + Low_temp*Treatment + White*Treatment, random=~1|sampleID,  data=DTpiles)
+Nitrogen2<-lme(IR ~ Habituation + N_mean*Treatment, random=~1|sampleID,  data=DTpiles)
+Phosphorus2<-lme(IR ~ Habituation + P_mean*Treatment, random=~1|sampleID,  data=DTpiles)
+Nutrient2<-lme(IR ~ Habituation + N_mean*Treatment + P_mean*Treatment, random=~1|sampleID,  data=DTpiles)
+Full2<-lme(IR ~ Habituation + White*Treatment + Low_temp*Treatment + N_mean*Treatment + P_mean*Treatment, random=~1|sampleID,  data=DTpiles)
+
