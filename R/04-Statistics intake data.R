@@ -51,8 +51,8 @@ outputfun <- function(model) {
 OutAll<-lapply(Mods, outputfun)
 OutAll<-rbindlist(OutAll, fill = TRUE)
 OutAll$Model<-Names
-#chaning some names in the output
-setnames(OutAll, "(Intercept)", "Intercept")
+#chaning some columns in the output
+OutAll[,`(Intercept)`:=NULL]
 setnames(OutAll, "HabituationHabituated", "Habituation")
 
 #function to swap out specific words in column names for new ones
@@ -91,15 +91,20 @@ lapply(seq.int(oldcols), function(i){
     fix(v1, v2, OutAll)
   }
 })
+
+#swaping out ":" for "*"
+nameswap(old=':', new='*', Data=OutAll)
+#one last name change
+setnames(OutAll, "Quality*Temp", "Temp*Quality")
+
 #now reorder the cols
 setcolorder(OutAll, c("Model", 
-                      "Intercept",
                       "Habituation", 
                       "Quality", 
-                      "Temp", "Quality:Temp", 
-                      "Coat", "Coat:Quality",
-                      "N", "N:Quality",
-                      "P", "P:Quality",
+                      "Temp", "Temp*Quality", 
+                      "Coat", "Coat*Quality",
+                      "N", "N*Quality",
+                      "P", "P*Quality",
                       "R2m","R2c"))
 
 
