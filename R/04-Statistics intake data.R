@@ -23,6 +23,8 @@ Names<-c('Null', 'Base', 'Temp', 'Coat', 'Energetic', 'Nitrogen', 'Phosphorus', 
 AIC<-as.data.table(aictab(REML=F, cand.set = Mods, modnames = Names, sort = TRUE))
 AIC[,ModelLik:=NULL]
 AIC[,Cum.Wt:=NULL]
+#round whole table to 3 dec places
+AIC<-AIC %>% mutate_if(is.numeric, round, digits=3)
 
 #to get effects for the coat colour in the energetics model
 effsC<-ggpredict(Energetic, terms = c("White", "Treatment"))
