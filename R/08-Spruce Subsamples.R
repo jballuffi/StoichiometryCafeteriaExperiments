@@ -49,8 +49,8 @@ LocCols<-c("I2"="forest green", "I4"="darkolivegreen3", "J1"="blue4",
 C1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=C), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=C, colour=SampleLoc), size=4, width=.3)+
-  scale_color_manual(values=LocCols, name="Trap")+
-  labs(x="Predicted Nutritional Rank", title="A) % Carbon")+
+  scale_color_manual(values=LocCols, name="Site")+
+  labs(x="Predicted Quality", title="A) % Carbon")+
   theme(axis.text=element_text(size=11, color="black"),
         axis.title=element_blank(),
         axis.title.y = element_blank(),
@@ -64,8 +64,8 @@ C1<-ggplot(Spruce)+
 N1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=N), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=N, colour=SampleLoc), size=4, width=.3)+
-  scale_color_manual(values=LocCols, name="Trap")+
-  labs(x="Predicted Nutritional Rank", title="B) % Nitrogen")+
+  scale_color_manual(values=LocCols, name="Site")+
+  labs(x="Predicted Quality", title="B) % Nitrogen")+
   theme(axis.text=element_text(size=11, color="black"),
         axis.title.x=element_text(size=16),
         axis.title.y = element_blank(),
@@ -79,8 +79,8 @@ N1<-ggplot(Spruce)+
 P1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=P), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=P, colour=SampleLoc), size=4, width=.3)+
-  scale_color_manual(values=LocCols, name="Trap")+
-  labs(x="Predicted Nutritional Rank", title="C) % Phosphorus")+
+  scale_color_manual(values=LocCols, name="Site")+
+  labs(x="Predicted Quality", title="C) % Phosphorus")+
   theme(axis.text=element_text(size=11, color="black"),
         axis.title.x = element_blank(),
         axis.title.y = element_blank(),
@@ -102,7 +102,7 @@ rankcols<- c("High"="grey70", "Low"="white")
 #CARBON
 C2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=C, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
-  scale_fill_manual(values=rankcols, name="Predicted Rank")+
+  scale_fill_manual(values=rankcols, name="Predicted Quality")+
   labs(title="A) % Carbon")+
   theme(axis.text=element_text(size=11, color="black"),
         axis.title.y= element_blank(),
@@ -116,7 +116,7 @@ C2<-ggplot(Full)+
 #NITROGEN
 N2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=N, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
-  scale_fill_manual(values=rankcols, name="Predicted Rank")+
+  scale_fill_manual(values=rankcols, name="Predicted Quality")+
   labs(title="B) % Nitrogen")+
   theme(axis.text=element_text(size=11, color="black"),
         axis.title.y=element_blank(),
@@ -130,7 +130,7 @@ N2<-ggplot(Full)+
 #PHOSPHORUS
 P2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=P, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
-  scale_fill_manual(values=rankcols, name="Predicted Rank")+
+  scale_fill_manual(values=rankcols, name="Predicted Quality")+
   labs(title="C) % Phosphorus")+
   theme(axis.text=element_text(size=11, color="black"),
         axis.title.y=element_blank(),
