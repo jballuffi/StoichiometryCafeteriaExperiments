@@ -1,0 +1,16 @@
+---
+title: "Model Output Tables"
+author: "JBF"
+date: "May 4, 2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(data.table)
+```
+
+```{r}
+feedout<-fread("../Findings/Table5.csv")
+knitr::kable(feedout)
+```
