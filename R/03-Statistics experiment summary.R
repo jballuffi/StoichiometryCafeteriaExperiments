@@ -6,13 +6,17 @@ DTpiles<-readRDS("Input/pile_format.rds")
 DTtrials<-readRDS("Input/trial_format.rds")
 
 #Summary info for cafeteria experiments
-unique(DTtrials$Date) #summary of experiment dates
-unique(DTtrials$Eartag) #summary of individuals
-max(DTtrials$Low_temp) #max lowest temp
-min(DTtrials$Low_temp) #min lowest temp
-max(DTtrials$White)   #max %white
-median(DTtrials$White)  #min %white
-
+length(unique(DTtrials$Eartag)) #summary of individuals
+summary(DTtrials$Trial) 
+max(DTtrials$Low_temp) 
+min(DTtrials$Low_temp) 
+median(DTtrials$Low_temp)
+max(DTtrials$White)   
+median(DTtrials$White)
+median(DTtrials$N)
+sd(DTtrials$N)
+median(DTtrials$P)
+sd(DTtrials$P)
 
 #correlations to check for overlap between hypothesis testing
 cor(DTtrials$White, DTtrials$N)
