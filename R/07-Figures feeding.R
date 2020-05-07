@@ -122,7 +122,7 @@ ggsave(filename="Findings/Figure7.jpeg", Fig7, width = 6, height = 4, units = "i
 
 
 
-### Figure A3 ###
+### Figure A5 ###
 
 #Additional figure of Total consumption vs. preference
 Prefmod<-lm(Diff_IR~IR, data=DTtrials)
@@ -135,6 +135,17 @@ Prefmod<-lm(Diff_IR~IR, data=DTtrials)
     themeblank)
 
 ggsave(filename="Findings/FigureA5.jpeg", FigA5, width = 6, height = 4, units = "in")
+
+
+### Figure A6 ###
+Massmod<-lm(Mass_change~Start_mass, data=DTtrials)
+
+(FigA6<-ggplot(data=DTtrials)+
+    geom_abline(intercept = (coef(Massmod)["(Intercept)"]), slope = (coef(Massmod)["Start_mass"]), 
+                size = 1, color="grey 50")+
+    geom_point(aes(y=Mass_change, x=Start_mass), size=3, colour="grey20")+
+    labs(x="Starting mass (g)", y="Mass change (% lost)")+
+    themeblank)
 
 
 
