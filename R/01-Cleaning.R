@@ -149,6 +149,8 @@ trials<-merge(trap.nutrients, trials, by = c('Trap'), all.y = TRUE)
 #calculate the amounts eaten for each rank
 trials[, Diff_high := (Start_high-End_high)]     
 trials[, Diff_low := (Start_low-End_low)]       
+#mass change times 100
+trials[, Mass_change := (Mass_change*100)]
 
 
 # reorganize raw data into a pile format, each row represents one pile in an experiment
