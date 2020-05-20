@@ -13,9 +13,9 @@ min(DTtrials$Low_temp)
 median(DTtrials$Low_temp)
 max(DTtrials$White)   
 median(DTtrials$White)
-median(DTtrials$N)
+mean(DTtrials$N)
 sd(DTtrials$N)
-median(DTtrials$P)
+mean(DTtrials$P)
 sd(DTtrials$P)
 
 #correlations to check for overlap between hypothesis testing
