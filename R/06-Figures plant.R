@@ -72,12 +72,13 @@ ggsave(filename="Findings/Figure1.jpeg", Fig1, width = 4.75, height = 8.5, units
 
 
 #### FIGURE 2 ####
-
+qualcols<-c("High" = "Forestgreen", "Low" = "Yellow3", "None" = "Black")
 TrapShapes2<-c("Sampled"=16, "Offered"=8)
 
 (NPscatter<-ggplot(data=DTtraps2)+
-    geom_point(aes(y=P, x=N, shape=Sampling), size=3)+
+    geom_point(aes(y=P, x=N, shape=Sampling, colour=Rank), size=3)+
     scale_shape_manual(values=TrapShapes2, name="Site Status")+
+    scale_color_manual(values=qualcols, name="Spruce Quality Rank")+
     geom_abline(intercept = 0.01354, slope = 0.1256)+
     geom_text(aes(.85, .2, label="y = 0.13x + 0.014"), size=4)+
     geom_text(aes(.8, .19, label="R2 = 0.43"), size=4)+
@@ -86,8 +87,9 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
     themeblank)
 
 (NPSCscatter<-ggplot(data=DTtraps2)+
-    geom_point(aes(y=PSC, x=N, shape=Sampling), size=3)+
+    geom_point(aes(y=PSC, x=N, shape=Sampling, colour=Rank), size=3)+
     scale_shape_manual(values=TrapShapes2, name="Site Status")+
+    scale_color_manual(values=qualcols, name="Spruce Quality Rank")+
     geom_abline(intercept = 28.09, slope = -10.74)+
     geom_text(aes(1.27, 30, label="y = -10.74x + 28.09"), size=4)+
     geom_text(aes(1.27, 28, label="R2 = 0.17"), size=4)+
@@ -96,8 +98,9 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
     themeblank)
 
 (PPSCscatter<-ggplot(data=DTtraps2)+
-    geom_point(aes(y=PSC, x=P, shape=Sampling), size=3)+
-    scale_shape_manual(values=TrapShapes, name="Site Status")+
+    geom_point(aes(y=PSC, x=P, shape=Sampling, colour=Rank), size=3)+
+    scale_shape_manual(values=TrapShapes2, name="Site Status")+
+    scale_color_manual(values=qualcols, name="Spruce Quality Rank")+
     geom_abline(intercept = 21.93, slope = -33.61)+
     geom_text(aes(.115, 31, label="y = -33.6x + 21.9"), size=4)+
     geom_text(aes(.115, 29, label="R2 = 0.059"), size=4)+
@@ -106,7 +109,7 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
     themeblank)
 
 Fig2 <- NPscatter / NPSCscatter / PPSCscatter + plot_layout(guides = 'collect')
-ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 4.75, height = 8.5, units = "in")
+ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 6, height = 9.5, units = "in")
 
 
 
