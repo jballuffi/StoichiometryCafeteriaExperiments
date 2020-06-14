@@ -1,4 +1,4 @@
-libs<-c('dplyr', 'data.table','sf', 'rgdal','raster','sp', 'ggplot2','RColorBrewer', 'ggpubr', 'ggeffects', 'patchwork')
+libs<-c('dplyr', 'data.table', 'ggplot2','ggpubr', 'ggeffects', 'patchwork', 'gghighlight')
 lapply(libs, require, character.only = TRUE)
 utm21N <- '+proj=longlat +zone=21 ellps=WGS84'
 
@@ -15,9 +15,17 @@ effsP<-readRDS("Input/effects_pref.rds")
 themeblank <- theme(axis.title = element_text(size=14),
                 axis.text.x = element_text(size=10),
                 legend.key = element_blank(),
+                legend.position = "none",
                 panel.background = element_blank(),
                 panel.border = element_rect(colour = "black", fill=NA, size=1))
 
+themeblankguide <- theme(axis.title = element_text(size=14),
+                    axis.text.x = element_text(size=10),
+                    legend.key = element_blank(),
+                    panel.background = element_blank(),
+                    panel.border = element_rect(colour = "black", fill=NA, size=1))
+
+qualcols<-c("High" = "Forestgreen", "Low" = "Yellow3")
 
 #### FIGURE 4 ####
 
@@ -56,51 +64,43 @@ ggsave(filename="Findings/Figure4.jpeg", Fig4, width = 5.5, height = 11.5, units
 #Boxplot showing the total trend
 (boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
    geom_boxplot(position="dodge", notch=FALSE)+ 
-   geom_jitter( width=.25, size=3)+
+   geom_jitter(width=.25, size=2.5, colour="grey70")+
+   scale_color_manual(values=qualcols)+
    labs(y="Spruce intake rate (g/kg/day)", x="Spruce quality")+
    ggtitle("A")+
    themeblank)
 
 #path plot that matches boxplot
 (pathplot<-ggplot(data=DTpiles)+
-    geom_path(aes(y=IR, x=Treatment, group=sampleID), size=1)+
+    geom_path(aes(y=IR, x=Treatment, group=sampleID, colour=Eartag), size=1)+
+    scale_x_discrete(expand = c(.2, .2))+
+    gghighlight(sampleID %in% list("A1680_10/27/2019", "A1667_11/24/2019"), max_highlight = 2, use_direct_label = NULL)+
     labs(y=" ", x="Spruce quality")+
+    scale_color_manual(values=c("#1b9e77", "#d95f02"))+
     ggtitle("B")+
     themeblank)
 
-Fig5<- ggarrange(boxplot, pathplot,  ncol=2, nrow=1, label.x = 3)
+(Fig5<- ggarrange(boxplot, pathplot,  ncol=2, nrow=1, label.x = 3))
 ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 7.3, height = 4.3, units = "in")
 
 
 #### Figure 6 ####
-qualcols<-c("High" = "Forestgreen", "Low" = "Yellow3")
-theme6 <- theme(axis.title = element_text(size=14),
-               axis.text.x = element_text(size=10),
-               axis.text.y = element_text(size=10),
-               legend.key = element_blank(),
-               panel.background = element_blank(),
-               panel.grid = element_line(colour = "grey90", size = .3),
-               panel.border = element_rect(colour = "black", fill=NA, size=1))
 
 #plot that shows intake as a function of coat colour with spruce quality
 (Coat<-ggplot()+
   geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group, fill=group),
               data=effsC, colour="grey80", alpha=.3 )+
   geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsC)+
-  # geom_point(aes(y=IR, x=White, color=Treatment), size= 2, data=DTpiles)+
-  # scale_color_manual(values=qualcols, name = "Spruce Quality", guide=FALSE)+
   labs(x = "White (%)", y = "Spruce intake rate (g/kg/day)")+
-  theme6)
+  themeblankguide)
 
 #plot that shows intake as a function of temperature with spruce quality
 (Temp<-ggplot()+
   geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group, fill=group),
               data=effsT, colour="grey80", alpha=.3 )+
   geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsT)+
-  #geom_point(aes(y=IR, x=Low_temp, color=Treatment), size= 2, data=DTpiles)+
-  # scale_color_manual(values=qualcols, name = "Spruce Quality", guide=FALSE)+
   labs(x = "Low ambient temperature (°C)", y = " ")+
-  theme6)
+  themeblankguide)
 
 (Fig6<- (Coat + Temp & scale_fill_manual(values=qualcols, name = "Spruce quality")) + plot_layout(guides = 'collect'))
 ggsave(filename="Findings/Figure6.jpeg", Fig6, width = 9, height = 4.5, units = "in")
