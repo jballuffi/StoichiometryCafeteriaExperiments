@@ -111,8 +111,8 @@ ggsave(filename="Findings/Figure6.jpeg", Fig6, width = 9, height = 4.5, units = 
 (Fig7<-ggplot(DTtrials)+
     geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group),
                 data=effsP, colour="grey80", alpha=.3 )+
-    geom_point(aes(y=Mass_change, x=Diff_IR),  size=3, colour="grey20")+
     geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsP)+
+    geom_point(aes(y=Mass_change, x=Diff_IR),  size=3, colour="grey20")+
     geom_vline(xintercept=0, size=1.2, color="grey40", linetype="dashed")+
     labs(x="Preference for high-quality spruce", y="Lost body mass(%)")+
     themeblank)
