@@ -45,7 +45,7 @@ thememap <- theme(axis.text= element_blank(),
 
 (Nmap<-ggplot(data=gridN) + 
     geom_raster(aes(x=x, y=y, fill=N))+
-    scale_fill_gradient(high="darkgreen", low="yellow", name="% N")+
+    scale_fill_gradient(high="darkgreen", low="yellow", name="N (%)              ")+
     ggtitle("A) Nitrogen")+
     geom_point(aes(POINT_X, POINT_Y, shape=Sampling), color="black", data = DTtraps, size=3)+
     scale_shape_manual(values=TrapShapes, name="Site Status")+
@@ -53,7 +53,7 @@ thememap <- theme(axis.text= element_blank(),
 
 (Pmap<-ggplot(data=gridP) + 
     geom_raster(aes(x=x, y=y, fill=P))+
-    scale_fill_gradient(high="darkgreen", low="yellow", name="% P")+
+    scale_fill_gradient(high="darkgreen", low="yellow", name="P (%)              ")+
     geom_point(aes(POINT_X, POINT_Y, shape=Sampling), color="black", data = DTtraps, size=3)+
     scale_shape_manual(values=TrapShapes, name="Site Status")+
     ggtitle("B) Phosphorus")+
@@ -61,7 +61,7 @@ thememap <- theme(axis.text= element_blank(),
 
 (PSCmap<-ggplot(data=gridPSC) + 
     geom_raster(aes(x=x, y=y, fill=PSC))+
-    scale_fill_gradient(high="yellow", low="darkgreen", name="Total terpene (mg/g)")+
+    scale_fill_gradient(high="yellow", low="darkgreen", name="Terpene (mg/g)")+
     geom_point(aes(POINT_X, POINT_Y, shape=Sampling), color="black", data = DTtraps, size=3)+
     scale_shape_manual(values=TrapShapes, name="Site Status")+
     ggtitle("C) Plant Secondary Compounds")+
