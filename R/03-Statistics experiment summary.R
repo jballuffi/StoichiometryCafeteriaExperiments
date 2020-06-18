@@ -7,6 +7,8 @@ DTtrials<-readRDS("Input/trial_format.rds")
 
 #Summary info for cafeteria experiments
 length(unique(DTtrials$Eartag)) #summary of individuals
+DTtrials[Sex=="M", length(unique(Eartag))] #number of males
+DTtrials[Sex=="F", length(unique(Eartag))] #number of females
 summary(DTtrials$Trial) 
 max(DTtrials$Low_temp) 
 min(DTtrials$Low_temp) 
