@@ -149,18 +149,14 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 6, height = 9.5, units = 
 
 (DBHPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=AvgDBH), size = 3)+
-    geom_text(aes(11, 30, label="y = -0.29x + 24.01"), size=5)+
-    geom_text(aes(11, 28, label="t = -0.708, p = 0.48"), size=5)+
-    geom_abline(aes(intercept=24.01, slope=-0.29), size=1.2, colour="grey20")+
+    geom_text(aes(5, 30, label="p = 0.48"), size=5)+
     labs(x="Mean DBH (cm)", y="PSC")+
     ggtitle("E")+
     themeblank)
 
 (CanopyPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=CanopyClosure), size = 3)+
-    geom_abline(aes(intercept=24.01, slope=-0.054), size=1.2, colour="grey20")+
-    geom_text(aes(26, 30,  label="y = -0.054x + 24.01"), size=5)+
-    geom_text(aes(24, 28, label="t = -1.64, p =0.11"), size=5)+
+    geom_text(aes(14, 30, label="p =0.11"), size=5)+
     labs(x="Canopy Closure (%)", y=NULL)+
     ggtitle("F")+
     themeblank)
