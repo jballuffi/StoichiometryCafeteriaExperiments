@@ -1,7 +1,7 @@
 libs<-c("data.table",'stargazer', 'AICcmodavg', 'ggplot2','RColorBrewer','lme4','pwr','MuMIn','nlme', 'effects', 'arm', 'rsq')
 lapply(libs, require, character.only = TRUE)
 
-      ###Stats for Black Spruce Variation on grid
+      ####Stats for Black Spruce Variation on grid
 
 #Import trap/grid dataframe
 DTtraps<-readRDS("Input/all_trap_locs.rds")
