@@ -88,6 +88,15 @@ fitP<-fitted(HabModP)
 plot(resP~fitP)
 lag.plot(resP,diag = FALSE, do.lines = FALSE)
 
+#Habitat covariate analysis for Phosphorus
+HabModC<-lm(DTtraps$TC~DTtraps$AvgDBH+DTtraps$CanopyClosure)
+summary(HabModC)
+resC<-residuals(HabModC)
+hist(resC)
+fitC<-fitted(HabModC)
+plot(resC~fitC)
+lag.plot(resC,diag = FALSE, do.lines = FALSE)
+
 #Habitat covariate analysis for PSCs
 HabModPSC<-lm(DTtraps$PSC~DTtraps$AvgDBH+DTtraps$CanopyClosure)
 summary(HabModPSC)
