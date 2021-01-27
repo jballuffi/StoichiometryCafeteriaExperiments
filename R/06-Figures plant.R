@@ -147,21 +147,36 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 6, height = 9.5, units = 
     ggtitle("D")+
     themeblank)
 
+(DBHC<-ggplot(data=DTtraps2)+
+        geom_point(aes(y=TC, x=AvgDBH), size = 3)+
+        geom_text(aes(12, 51, label="p = 0.80"), size=5)+
+        labs(x=NULL, y="% Carbon")+
+        ggtitle("E")+
+        themeblank)
+
+(CanopyC<-ggplot(data=DTtraps2)+
+        geom_point(aes(y=TC, x=CanopyClosure), size = 3)+
+        geom_text(aes(15, 51, label="p = 0.53"), size=5)+
+        labs(x=NULL, y=NULL)+
+        ggtitle("F")+
+        themeblank)
+
 (DBHPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=AvgDBH), size = 3)+
     geom_text(aes(5, 30, label="p = 0.48"), size=5)+
     labs(x="Mean DBH (cm)", y="PSC")+
-    ggtitle("E")+
+    ggtitle("G")+
     themeblank)
 
 (CanopyPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=CanopyClosure), size = 3)+
     geom_text(aes(14, 30, label="p =0.11"), size=5)+
     labs(x="Canopy Closure (%)", y=NULL)+
-    ggtitle("F")+
+    ggtitle("H")+
     themeblank)
 
 
-Fig3<-ggarrange(DBHN, CanopyN, DBHP, CanopyP, DBHPSC, CanopyPSC, ncol=2, nrow=3)
+
+Fig3<-ggarrange(DBHN, CanopyN, DBHP, CanopyP, DBHC, CanopyC, DBHPSC, CanopyPSC, ncol=2, nrow=4)
 ggsave(filename="Findings/Figure3.jpeg", Fig3, width = 9, height = 10, units = "in")
 
