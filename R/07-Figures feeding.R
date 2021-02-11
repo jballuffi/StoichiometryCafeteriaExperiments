@@ -91,7 +91,7 @@ ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 7.3, height = 4.3, units 
   geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group, fill=group),
               data=effsC, colour="grey80", alpha=.3 )+
   geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsC)+
-  labs(x = "White (%)", y = "Spruce intake rate (g/kg/day)")+
+  labs(x = "White (%)", y = "Spruce intake rate (g/kg/day)", title = "A")+
   themeblankguide)
 
 #plot that shows intake as a function of temperature with spruce quality
@@ -99,7 +99,7 @@ ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 7.3, height = 4.3, units 
   geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group, fill=group),
               data=effsT, colour="grey80", alpha=.3 )+
   geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsT)+
-  labs(x = "Low ambient temperature (°C)", y = " ")+
+  labs(x = "Low ambient temperature (°C)", y = " ", title = "B")+
   themeblankguide)
 
 (Fig6<- (Coat + Temp & scale_fill_manual(values=qualcols, name = "Spruce quality")) + plot_layout(guides = 'collect'))
