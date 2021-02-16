@@ -128,8 +128,6 @@ ggsave(filename="Findings/Figure7.jpeg", Fig7, width = 6, height = 4, units = "i
 Prefmod<-lm(Diff_IR~IR, data=DTtrials)
 
 (FigA5<-ggplot(data=DTtrials)+
-    geom_abline(intercept = (coef(Prefmod)["(Intercept)"]), slope = (coef(Prefmod)["IR"]), 
-              size = 1, color="grey 50")+
     geom_point(aes(y=Diff_IR, x=IR), size=3, colour="grey20")+
     labs(x="Total intake rate (g/kg/day)", y="Preference for high quality spruce")+
     themeblank)
