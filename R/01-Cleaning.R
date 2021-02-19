@@ -19,7 +19,7 @@ Spruce[SampleLoc%in%c("I2","I4","J1"), Rank:="High"]
 Spruce[SampleLoc%in%c("L4","L6","N5"), Rank:="Low"]
 Spruce[is.na(Rank), Rank:="None"]
 
-  #Setting up the raster layers of interpolated nutrient maps
+#Setting up the raster layers of interpolated nutrient maps
 utm21N <- '+proj=longlat +zone=21 ellps=WGS84'
 #import raster layers for bloomfield N, P, and secondary compounds and project correctly
 bloomN<-raster("Input/PIMA_N.tif")
@@ -44,7 +44,7 @@ gridPSC <- data.table(bloomPSC_points)
 setnames(gridPSC, "terpene_idw", "PSC")
 
 
-  #import the grid shapefile, get rid of other 3 grid locations
+#import the grid shapefile, get rid of other 3 grid locations
 grid<-as.data.table(st_read("Input/SamplePoints_AllGrids.shp"))
 grid<-grid[SiteName=="Bloomfield"]
 grid[, geometry:=NULL]
@@ -53,7 +53,7 @@ grid[, SiteName:=NULL]
 grid[, Trap := tstrsplit(PlotName, "+", fixed=TRUE, keep=c(2))]
 grid[, PlotName:=NULL]
 
-  #import habitat covariates for trap locations
+#import habitat covariates for trap locations
 Cov<-data.table(read.csv("Input/PlotCovariates.csv"))
 Cov<-Cov[SiteName=="Bloomfield"]
 Cov[, SampleLoc := tstrsplit(PlotName, "+", fixed=TRUE, keep=c(2))]
@@ -117,7 +117,7 @@ ind.nut<-merge(ind.nut, ind.PSC, by=c("Eartag"))  #the datasheet for individual 
 
 
 
-      ### Import experiment data
+### Import experiment data
 
 ##each row represents one cafeteria experiment
 trials<-fread("Input/feeding_trials_2018_2019.csv")
