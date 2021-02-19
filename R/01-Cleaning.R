@@ -179,7 +179,7 @@ trials[, IR_low:=(Diff_low/(Start_mass/1000))] #Calculate intake rate of low ran
 trials[, Diff_IR := (IR_high-IR_low)] #Calculate the "preference" in intake rate form
 
 
-      ###Save the cleaned and organized datasheets in RDS files
+###Save the cleaned and organized datasheets in RDS files
 
 saveRDS(piles,"Input/pile_format.rds")   #by pile
 saveRDS(DTtraps, "Input/all_trap_locs.rds") #trap locs, names, sampling status, and stoich results
