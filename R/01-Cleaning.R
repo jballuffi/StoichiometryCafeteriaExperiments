@@ -1,11 +1,11 @@
 libs<-c('data.table','sf', 'rgdal','raster','sp')
 lapply(libs, require, character.only = TRUE)
 
-    ####Data prep and cleaning
+####Data prep and cleaning
 
-           ## Nutritional Mapping and extraction
+## Nutritional Mapping and extraction
 
-  #Setting up a dataframe for the original nutrient sampling
+#Setting up a dataframe for the original nutrient sampling
 Spruce<-read.csv("Input/PIMA_2018Oct6.csv")
 Spruce<-as.data.table(Spruce)
 Spruce<-Spruce[Site=="BL"]
