@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xml:lang="en"><Esri><CreaDate>20190704</CreaDate><CreaTime>18191600</CreaTime><ArcGISFormat>1.0</ArcGISFormat><SyncOnce>TRUE</SyncOnce><DataProperties><lineage><Process ToolSource="c:\program files\arcgis\desktop10.5\ArcToolbox\Toolboxes\Analysis Tools.tbx\Buffer" Date="20190704" Time="181916">Buffer SamplePoints "\\psf\Home\Desktop\Spatial Projects Data\Projects\2_GridLayouts\GridPts_Buffer100m.shp" "100 Meters" FULL ROUND ALL # PLANAR</Process></lineage></DataProperties></Esri></metadata>
