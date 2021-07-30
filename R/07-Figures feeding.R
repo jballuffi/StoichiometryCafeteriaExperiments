@@ -27,7 +27,7 @@ themeblankguide <- theme(axis.title = element_text(size=14),
 
 qualcols<-c("High" = "Forestgreen", "Low" = "Yellow3")
 
-#### FIGURE 4 ####
+#### FIGURE A6 ####
 
 #if you want a path plot, use ID_Year, not Eartag.
 (Intake<-ggplot(data=DTtrials)+
@@ -54,12 +54,11 @@ qualcols<-c("High" = "Forestgreen", "Low" = "Yellow3")
   themeblank)
 
 
-Fig4<-ggarrange(Intake, Pref, Weight,  ncol=1, nrow=3, label.x = 3)
-ggsave(filename="Findings/Figure4.jpeg", Fig4, width = 5.5, height = 11.5, units = "in")
+(Fig4<-ggarrange(Intake, Pref, Weight,  ncol=1, nrow=3, label.x = 3))
 
 
 
-#### Figure 5 ####
+#### Figure 1 ####
 
 #Boxplot showing the total trend
 (boxplot<-ggplot(data=DTpiles, aes(y=IR, x=Treatment))+
@@ -81,10 +80,9 @@ ggsave(filename="Findings/Figure4.jpeg", Fig4, width = 5.5, height = 11.5, units
     themeblank)
 
 (Fig5<- ggarrange(boxplot, pathplot,  ncol=2, nrow=1, label.x = 3))
-ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 7.3, height = 4.3, units = "in")
 
 
-#### Figure 6 ####
+#### Figure 2 ####
 
 #plot that shows intake as a function of coat colour with spruce quality
 (Coat<-ggplot()+
@@ -103,10 +101,9 @@ ggsave(filename="Findings/Figure5.jpeg", Fig5, width = 7.3, height = 4.3, units 
   themeblankguide)
 
 (Fig6<- (Coat + Temp & scale_fill_manual(values=qualcols, name = "Spruce quality")) + plot_layout(guides = 'collect'))
-ggsave(filename="Findings/Figure6.jpeg", Fig6, width = 9, height = 4.5, units = "in")
 
 
-### Figure 7 ###
+##### Figure 3 ####
 
 (Fig7<-ggplot(DTtrials)+
     geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group),
@@ -117,33 +114,26 @@ ggsave(filename="Findings/Figure6.jpeg", Fig6, width = 9, height = 4.5, units = 
     labs(x="Preference for high-quality spruce", y="Lost body mass(%)")+
     themeblank)
 
-ggsave(filename="Findings/Figure7.jpeg", Fig7, width = 6, height = 4, units = "in")
 
-
-
-
-### Figure A5 ###
+##### Figure A9 ####
 
 #Additional figure of Total consumption vs. preference
 Prefmod<-lm(Diff_IR~IR, data=DTtrials)
 
-(FigA5<-ggplot(data=DTtrials)+
+(FigA9<-ggplot(data=DTtrials)+
     geom_point(aes(y=Diff_IR, x=IR), size=3, colour="grey20")+
     labs(x="Total intake rate (g/kg/day)", y="Preference for high quality spruce")+
     themeblank)
 
-ggsave(filename="Findings/FigureA5.jpeg", FigA5, width = 6, height = 4, units = "in")
 
 
-### Figure A6 ###
-Massmod<-lm(Mass_change~Start_mass, data=DTtrials)
+#### Save figures ####
+ggsave(filename="Output/FigureA6.jpeg", Fig4, width = 5.5, height = 11.5, units = "in")
 
-(FigA6<-ggplot(data=DTtrials)+
-    geom_abline(intercept = (coef(Massmod)["(Intercept)"]), slope = (coef(Massmod)["Start_mass"]), 
-                size = 1, color="grey 50")+
-    geom_point(aes(y=Mass_change, x=Start_mass), size=3, colour="grey20")+
-    labs(x="Starting mass (g)", y="Mass change (% lost)")+
-    themeblank)
+ggsave(filename="Output/Figure1.jpeg", Fig5, width = 7.3, height = 4.3, units = "in")
 
+ggsave(filename="Output/Figure2.jpeg", Fig6, width = 9, height = 4.5, units = "in")
 
+ggsave(filename="Output/Figure3.jpeg", Fig7, width = 6, height = 4, units = "in")
 
+ggsave(filename="Output/FigureA9.jpeg", FigA5, width = 6, height = 4, units = "in")
