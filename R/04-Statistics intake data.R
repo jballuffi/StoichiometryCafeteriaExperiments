@@ -117,16 +117,16 @@ saveRDS(effsT, "Input/effects_temp.rds")
 #### Saving tables
 
 #table 4
-fwrite(AIC, "Output/Table4.csv")     ###Saving the AIC table
+fwrite(AIC, "Output/TableA2.csv")     ###Saving the AIC table
 
 #table 5
-fwrite(OutAll, "Output/Table5.csv")
+fwrite(OutAll, "Output/Table2.csv")
 
 
 #table 5: all models
 stargazer(Mods,
           type="html",
-          out="Output/table5.html",
+          out="Output/Table2.html",
           digits = 2,
           column.labels = c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full")
           # covariate.labels = c("Temp", "White", "N", "P", "Rank", "Temp*Rank", "White*Rank", "Temp*Rank", "N*Rank", "P*Rank", "N*Rank", "P*Rank"),
