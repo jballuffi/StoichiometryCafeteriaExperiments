@@ -31,7 +31,7 @@ themeblank <- theme(axis.title = element_text(size=14),
                     legend.text = element_text(size=9),
                     legend.title = element_text(size=11))
 
-#### FIGURE 1 ####
+#### FIGURE A1 ####
 
 TrapShapes<-c("Sampled"=16, "Interpolated"=9, "Offered"=8)
 thememap <- theme(axis.text= element_blank(),
@@ -67,11 +67,11 @@ thememap <- theme(axis.text= element_blank(),
     ggtitle("C) Plant Secondary Compounds")+
     thememap)
 
+#make multi-panel
 (Fig1 <- Nmap / Pmap / PSCmap + plot_layout(guides = 'collect'))
-ggsave(filename="Findings/Figure1.jpeg", Fig1, width = 4.75, height = 8.5, units = "in")
 
 
-#### FIGURE 2 ####
+#### FIGURE A2 ####
 qualcols<-c("High" = "Forestgreen", "Low" = "Yellow3", "None" = "Black")
 TrapShapes2<-c("Sampled"=16, "Offered"=8)
 
@@ -108,12 +108,12 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
     ggtitle("C")+
     themeblank)
 
+#make multi-panel
 (Fig2 <- (NPscatter / NPSCscatter / PPSCscatter) + plot_layout(guides = 'collect'))
-ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 6, height = 9.5, units = "in")
 
 
 
-#### FIGURE 3 ####
+#### FIGURE A7 ####
 
 (DBHN<-ggplot(data=DTtraps2)+
    geom_point(aes(y=N, x=AvgDBH), size = 3)+
@@ -175,8 +175,13 @@ ggsave(filename="Findings/Figure2.jpeg", Fig2, width = 6, height = 9.5, units = 
     ggtitle("H")+
     themeblank)
 
-
-
+#make multi-panel
 Fig3<-ggarrange(DBHN, CanopyN, DBHP, CanopyP, DBHC, CanopyC, DBHPSC, CanopyPSC, ncol=2, nrow=4)
-ggsave(filename="Findings/Figure3.jpeg", Fig3, width = 9, height = 10, units = "in")
 
+
+
+
+#save all appendix figures
+ggsave(filename="Output/FigureA1.jpeg", Fig1, width = 4.75, height = 8.5, units = "in")
+ggsave(filename="Output/FigureA2.jpeg", Fig2, width = 6, height = 9.5, units = "in")
+ggsave(filename="Output/FigureA7.jpeg", Fig3, width = 9, height = 10, units = "in")
