@@ -58,5 +58,5 @@ AICbody<-AICbody %>% mutate_if(is.numeric, round, digits=3)
 
 
 #Save appendix AIC tables
-fwrite(AICfeed, "Findings/Table8.csv")
-fwrite(AICbody, "Findings/Table9.csv")
+fwrite(AICfeed, "Output/TableA3_1.csv")
+fwrite(AICbody, "Output/TableA3_2.csv")
