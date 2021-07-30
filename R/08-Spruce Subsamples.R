@@ -40,7 +40,7 @@ cor(Spruce$P, Spruce$N)
 
 
 
-              ### Appendix 2 ####
+              ### Appendix 3 ####
 #show just the subsample data
 LocCols<-c("I2"="forest green", "I4"="darkolivegreen3", "J1"="blue4", 
            "L4"="yellow3", "L6"="orange2", "N5"="darkgoldenrod4")
@@ -90,11 +90,10 @@ P1<-ggplot(Spruce)+
         panel.grid.minor.y=element_line(color="grey"),
         panel.grid.major.y=element_line(color="grey"))
 
-CNP1<-(C1 + N1 + P1 + plot_layout(guides = 'collect'))
-ggsave(filename="Findings/FigureA2.jpeg", CNP1, width = 12, height = 5, units = "in")
+(CNP1<-(C1 + N1 + P1 + plot_layout(guides = 'collect')))
 
 
-                    ### Appendix 3 ####
+                    ### Appendix 4 ####
 #show the subsample data compared to original samples
 
 rankcols<- c("High"="grey70", "Low"="white")
@@ -141,34 +140,12 @@ P2<-ggplot(Full)+
         panel.grid.minor.y=element_line(color="grey"),
         panel.grid.major.y=element_line(color="grey"))
 
-CNP2<-C2 + N2 + P2 + plot_layout(guides = 'collect')
-ggsave(filename="Findings/FigureA3.jpeg", CNP2, width = 12, height = 5, units = "in")
+(CNP2<-C2 + N2 + P2 + plot_layout(guides = 'collect'))
 
 
 
+#### Save figures ####
 
-                        ### Figure A4 ###
+ggsave(filename="Output/FigureA3.jpeg", CNP1, width = 12, height = 5, units = "in")
 
-#make linear regression
-lmNP<-lm(P~N, data=Spruce)
-ranks<-c("High"=19, "Low"=1) #making shapes
-
-#plot that takes coef and intercepts directly from linear regression
-Corr<-ggplot(Spruce)+
-  geom_point(aes(y=P, x=N, shape=Pred_rank), size=3)+
-  geom_abline(intercept = (coef(lmNP)["(Intercept)"]), slope = (coef(lmNP)["N"]))+
-  scale_shape_manual(values = ranks, name="Predicted Rank")+
-  labs(y="% Phosphorus", x="% Nitrogen")+
-  theme(axis.title=element_text(size=14),
-        axis.text.x = element_text(size=8),
-        axis.text.y = element_text(size=8),
-        legend.key = element_blank(),
-        panel.background = element_blank(),
-        panel.grid.minor.y = element_line(color="grey"),
-        panel.grid.major.y = element_line(color="grey"),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        legend.position = "right",
-        legend.direction = "vertical")
-Corr
-ggsave(filename="Findings/FigureA4.jpeg", Corr, width = 6, height = 4, units = "in")
-
+ggsave(filename="Output/FigureA4.jpeg", CNP2, width = 12, height = 5, units = "in")
