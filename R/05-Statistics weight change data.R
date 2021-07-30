@@ -117,16 +117,16 @@ saveRDS(effsP, "Input/effects_pref.rds")
 #### Saving tables
 
 #table 6
-fwrite(AIC, "Findings/Table6.csv")     ###Saving the AIC table
+fwrite(AIC, "Output/TableA2_2.csv")     ###Saving the AIC table
 
 #table 7
-fwrite(OutAll, "Findings/Table7.csv")
+fwrite(OutAll, "Output/Table3.csv")
                 
 
 #Another option for table 7
 stargazer(Mods,
           type="html",
-          out="Findings/table7.html",
+          out="Output/Table3.html",
           digits = 2,
           column.labels = c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full"),
           float.env = "sidewaystable"
