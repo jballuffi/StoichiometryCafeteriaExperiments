@@ -1,0 +1,10 @@
+Model_name,Feeding,Body
+Null,Hab,IR
+Base,Hab + Quality,IR + Pref
+Coat,Hab + Quality*Coat,IR + Pref*Coat
+Temp,Hab + Quality*Temp,IR + Pref*Temp
+Energetic,Hab + Quality*Temp + Quality*Coat,IR + Pref*Temp + Pref*Coat
+Nitrogen,Hab + Quality*N,IR + Pref*N
+Phosphorus,Hab + Quality*P,IR + Pref*P
+Nutrient,Hab + Quality*N + Quality*P,IR + Pref*N + Pref*P
+Full,Hab + Quality*Temp + Quality*Coat + Quality*N + Quality*P,IR + Pref*Temp + Pref*Coat + Pref*N + Pref*P
