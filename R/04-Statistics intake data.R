@@ -114,6 +114,57 @@ setcolorder(OutAll, c("Model",
                       "R2m","R2c"))
 
 
+
+
+####Test AIC results with transformed coat color####
+
+DTpiles[, White_asin := asin(White)]
+
+Null2 <- lmer(IR ~ Habituation + (1|sampleID) , REML=F, data=DTpiles)
+Base2 <- lmer(IR ~ Habituation + Treatment + (1|sampleID), REML=F, data=DTpiles)
+Temp2 <- lmer(IR ~ Habituation + Low_temp*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Coat2 <- lmer(IR ~ Habituation + White_asin*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Energetic2 <- lmer(IR ~ Habituation + White_asin*Treatment + Low_temp*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Nitrogen2 <- lmer(IR ~ Habituation + N_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Phosphorus2 <- lmer(IR ~ Habituation + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Nutrient2 <- lmer(IR ~ Habituation + N_mean*Treatment + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
+Full2 <- lmer(IR ~ Habituation + White_asin*Treatment + Low_temp*Treatment + N_mean*Treatment + P_mean*Treatment + (1|sampleID), REML=F, data=DTpiles)
+
+#List and AIC
+Mods2<-list(Null2, Base2, Temp2, Coat2, Energetic2, Nitrogen2, Phosphorus2, Nutrient2, Full2)
+AIC2<-as.data.table(aictab(REML=F, cand.set = Mods2, modnames = Names, sort = TRUE))
+AIC2[,ModelLik:=NULL]
+AIC2[,Cum.Wt:=NULL]
+#round whole table to 3 dec places
+AIC2<-AIC2 %>% mutate_if(is.numeric, round, digits=3)
+
+
+#summarize energetic model with transformed coat color
+summary(Energetic2)
+#results of non-transformed energetic model 
+summary(Energetic)
+
+#checking residuals for non-tranformed energetic model
+res<- residuals(Energetic)
+hist(res)
+fit<- fitted(Energetic)
+plot(res~fit)
+lag.plot(res, diag = FALSE, do.lines = FALSE)
+
+#check residuals for transformed energetic model
+res2<-residuals(Energetic2)
+hist(res2)
+fit2<-fitted(Energetic2)
+plot(res2~fit2)
+lag.plot(res2, diag = FALSE, do.lines = FALSE)
+
+
+
+
+
+
+#####Saving results####
+
 #Saving effects into input folder
 saveRDS(effsC, "Input/effects_coat.rds")
 saveRDS(effsT, "Input/effects_temp.rds")
