@@ -52,7 +52,7 @@ AICMS<- merge(AICMS, R2s, by="Modnames")
 
 #creating final format for table 2
 Tab2<- AICMS[, .(Modnames, Feeding, AICc, Delta_AICc, R2m, R2c)]
-
+setnames(Tab2, "Feeding", "Design")
 
 #to get effects for the coat colour in the energetics model
 effsC<-ggpredict(Energetic, terms = c("White", "Treatment"))
