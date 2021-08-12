@@ -29,9 +29,11 @@ AIC[,Cum.Wt:=NULL]
 AIC<-AIC %>% mutate_if(is.numeric, round, digits=3)
 
 
-
 #to get effects for weightloss~preference
 effsP <- ggpredict(Base, terms = c("Diff_IR"))
+
+
+####Collect model output information####
 
 #Function to collect coefficients, standard errors, and R2s for every model
 outputfun <- function(model) {
@@ -70,7 +72,7 @@ nameswap(old='Low_temp', new='Temp', Data=OutAll)
 nameswap(old='N_mean', new='N', Data=OutAll)
 nameswap(old='P_mean', new='P', Data=OutAll)
 
-####Combine interaction outputs whoe column names were reversed
+#Combine interaction outputs whoe column names were reversed
 
 #grabbinging column names with a ":" i.e. interaction outputs
 oldcols <- colnames(OutAll)[grepl(':', colnames(OutAll))]
@@ -94,7 +96,7 @@ lapply(seq.int(oldcols), function(i){
   }
 })
 
-#swaping out ":" for "*"
+#swapping out ":" for "*"
 nameswap(old=':', new='*', Data=OutAll)
 #one last name change
 setnames(OutAll, "Pref*Temp", "Temp*Pref")
@@ -110,11 +112,37 @@ setcolorder(OutAll, c("Model",
                       "rsq"))
 
 
+####Test AIC results with transformed coat color data####
+
+DTtrials[, White_asin:= asin(White)]
+
+Null2 <- lm(Mass_change ~ IR, data = DTtrials)
+Base2 <- lm(Mass_change ~ IR + Diff_IR, data = DTtrials)
+Temp2 <- lm(Mass_change ~ IR + Low_temp*Diff_IR, data = DTtrials)
+Coat2 <- lm(Mass_change ~ IR + White_asin*Diff_IR, data = DTtrials)
+Energetic2 <- lm(Mass_change ~ IR + White_asin*Diff_IR + Low_temp*Diff_IR, data = DTtrials)
+Nitrogen2 <- lm(Mass_change ~ IR + N_mean*Diff_IR, data = DTtrials)
+Phosphorus2 <- lm(Mass_change ~ IR + P_mean*Diff_IR, data = DTtrials)
+Nutrient2 <- lm(Mass_change ~ IR + N_mean*Diff_IR + P_mean*Diff_IR, data = DTtrials)
+Full2 <- lm(Mass_change ~ IR + White_asin*Diff_IR + Low_temp*Diff_IR + N_mean*Diff_IR + P_mean*Diff_IR, data = DTtrials)
+
+#List and AIC
+Mods2<-list(Null2, Base2, Temp2, Coat2, Energetic2, Nitrogen2, Phosphorus2, Nutrient2, Full2)
+AIC2<-as.data.table(aictab(REML=F, cand.set = Mods2, modnames = Names, sort = TRUE))
+AIC2[,ModelLik:=NULL]
+AIC2[,Cum.Wt:=NULL]
+#round whole table to 3 dec places
+AIC2<-AIC2 %>% mutate_if(is.numeric, round, digits=3)
+
+
+
+
+####Save everything####
+
 
 #saving the effects
 saveRDS(effsP, "Input/effects_pref.rds")
 
-#### Saving tables
 
 #table 6
 fwrite(AIC, "Output/TableA2_2.csv")     ###Saving the AIC table
