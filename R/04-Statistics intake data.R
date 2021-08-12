@@ -30,10 +30,40 @@ AIC[,Cum.Wt:=NULL]
 #round whole table to 3 dec places
 AIC<-AIC %>% mutate_if(is.numeric, round, digits=3)
 
+#merge model information with AIC output
+AICMS<- merge(AIC, models, by.x="Modnames", by.y="Model_name")
+
+#Function to collect R2s for every model
+collectR2 <- function(model) {
+  #collect R2s
+  rsqOut <- data.table(r.squaredGLMM(model))
+  rsqOut<- round(rsqOut, 2)
+  #return each datatable binded together by row
+  return(data.table(rsqOut))
+}
+
+#run function and get R2s for all models
+R2s<-lapply(Mods, collectR2)
+R2s<-rbindlist(R2s, fill = TRUE)
+R2s$Modnames<-Names
+
+#merge R2s with AIC table
+AICMS<- merge(AICMS, R2s, by="Modnames")
+
+#creating final format for table 2
+Tab2<- AICMS[, .(Modnames, Feeding, AICc, Delta_AICc, R2m, R2c)]
+
+
 #to get effects for the coat colour in the energetics model
 effsC<-ggpredict(Energetic, terms = c("White", "Treatment"))
 #to get the effects for the temperature in the energetic model
 effsT<-ggpredict(Energetic, terms = c("Low_temp", "Treatment"))
+
+
+
+
+
+#####Collect all coefficients and SEs for models####
 
 #Function to collect coefficients, standard errors, and R2s for every model
 outputfun <- function(model) {
