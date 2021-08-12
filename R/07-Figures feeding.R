@@ -86,19 +86,23 @@ qualcols<-c("High" = "Forestgreen", "Low" = "Yellow3")
 
 #plot that shows intake as a function of coat colour with spruce quality
 (Coat<-ggplot()+
-  geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group, fill=group),
+    geom_point(aes(x=White, y=IR, color=Treatment), alpha=0.5, data=DTpiles)+
+    scale_color_manual(values=qualcols, guide = NULL)+
+    geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group, fill=group),
               data=effsC, colour="grey80", alpha=.3 )+
-  geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsC)+
-  labs(x = "White (%)", y = "Spruce intake rate (g/kg/day)", title = "A")+
-  themeblankguide)
+    geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsC)+
+    labs(x = "Individual coat insulation (% White)", y = "Spruce intake rate (g/kg/day)", title = "A")+
+    themeblankguide)
 
 #plot that shows intake as a function of temperature with spruce quality
 (Temp<-ggplot()+
-  geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group, fill=group),
+    geom_point(aes(x=Low_temp, y=IR, color=Treatment), alpha=0.5, data=DTpiles)+
+    scale_color_manual(values=qualcols, guide= NULL)+
+    geom_ribbon(aes(x=x, ymin=conf.low, ymax=conf.high, group=group, fill=group),
               data=effsT, colour="grey80", alpha=.3 )+
-  geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsT)+
-  labs(x = "Low ambient temperature (°C)", y = " ", title = "B")+
-  themeblankguide)
+    geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsT)+
+    labs(x = "Minimum temperature (°C)", y = " ", title = "B")+
+    themeblankguide)
 
 (Fig6<- (Coat + Temp & scale_fill_manual(values=qualcols, name = "Spruce quality")) + plot_layout(guides = 'collect'))
 
@@ -111,7 +115,7 @@ qualcols<-c("High" = "Forestgreen", "Low" = "Yellow3")
     geom_line(aes(x=x, y=predicted, group=group), size = 1, color="grey 50", data=effsP)+
     geom_point(aes(y=Mass_change, x=Diff_IR),  size=3, colour="grey20")+
     geom_vline(xintercept=0, size=1.2, color="grey40", linetype="dashed")+
-    labs(x="Preference for high-quality spruce", y="Lost body mass(%)")+
+    labs(x="Preference for high-quality spruce", y="Lost body mass (% per day)")+
     themeblank)
 
 
