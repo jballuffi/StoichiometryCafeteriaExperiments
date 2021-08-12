@@ -202,14 +202,14 @@ saveRDS(effsT, "Input/effects_temp.rds")
 
 #### Saving tables
 
-#table 4
+#table 2
 fwrite(Tab2, "Output/Table2.csv")     ###Saving the AIC table
 
-#table 5
+#table A1
 fwrite(OutAll, "Output/TableA1.csv")
 
 
-#table 5: all models
+#table A1, in stargazer format
 stargazer(Mods,
           type="html",
           out="Output/TableA1.html",
