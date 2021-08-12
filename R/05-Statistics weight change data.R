@@ -5,6 +5,10 @@ lapply(libs, require, character.only = TRUE)
 DTtrials<-readRDS("Input/trial_format.rds")
 #elminate two experiments where bunnies escaped
 DTtrials<-DTtrials[!is.na(Mass_change)]
+#Import table that shows how models are constructed
+models<- fread("Input/model_construction.csv")
+models$Feeding <- NULL #delete column with feeding response models
+
 
 
 #### Weight Change AIC ####
@@ -27,6 +31,30 @@ AIC[,ModelLik:=NULL]
 AIC[,Cum.Wt:=NULL]
 #round whole table to 3 dec places
 AIC<-AIC %>% mutate_if(is.numeric, round, digits=3)
+
+#merge model information with AIC output
+AICMS<- merge(AIC, models, by.x="Modnames", by.y="Model_name")
+
+#Function to collect R2s for every model
+collectR2 <- function(model) {
+  #collect R2s
+  rsqOut <- data.table(r.squaredGLMM(model))
+  rsqOut<- round(rsqOut, 2)
+  #return each datatable binded together by row
+  return(data.table(rsqOut))
+}
+
+#run function and get R2s for all models
+R2s<-lapply(Mods, collectR2)
+R2s<-rbindlist(R2s, fill = TRUE)
+R2s$Modnames<-Names
+
+#merge R2s with AIC table
+AICMS<- merge(AICMS, R2s, by="Modnames")
+
+#creating final format for table 2
+Tab3<- AICMS[, .(Modnames, Body, AICc, Delta_AICc, R2m, R2c)]
+setnames(Tab3, "Body", "Design")
 
 
 #to get effects for weightloss~preference
