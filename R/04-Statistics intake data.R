@@ -3,10 +3,14 @@ lapply(libs, require, character.only = TRUE)
 
 #Import caf experiments in pile format
 DTpiles<-readRDS("Input/pile_format.rds")
+#Import table that shows how models are constructed
+models<- fread("Input/model_construction.csv")
+models$Body <- NULL #delete column with body condition models
 
 
 #### Feeding AIC ####
 
+#create models
 Null <- lmer(IR ~ Habituation + (1|sampleID) , REML=F, data=DTpiles)
 Base <- lmer(IR ~ Habituation + Treatment + (1|sampleID), REML=F, data=DTpiles)
 Temp <- lmer(IR ~ Habituation + Low_temp*Treatment + (1|sampleID), REML=F, data=DTpiles)
