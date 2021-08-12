@@ -104,9 +104,9 @@ nameswap(old='Low_temp', new='Temp', Data=OutAll)
 nameswap(old='N_mean', new='N', Data=OutAll)
 nameswap(old='P_mean', new='P', Data=OutAll)
 
-####Combine interaction outputs whoe column names were reversed
+#Combine interaction outputs whose column names were reversed
 
-#grabbinging column names with a ":" i.e. interaction outputs
+#grabbing column names with a ":" i.e. interaction outputs
 oldcols <- colnames(OutAll)[grepl(':', colnames(OutAll))]
 #re-order the column names
 newcols <- vapply(strsplit(oldcols, ':'), function(x) paste0(sort(x), collapse = ':'), 
@@ -132,6 +132,7 @@ lapply(seq.int(oldcols), function(i){
 nameswap(old=':', new='*', Data=OutAll)
 #one last name change
 setnames(OutAll, "Quality*Temp", "Temp*Quality")
+
 
 #now reorder the cols
 setcolorder(OutAll, c("Model", 
@@ -202,16 +203,16 @@ saveRDS(effsT, "Input/effects_temp.rds")
 #### Saving tables
 
 #table 4
-fwrite(AIC, "Output/TableA2.csv")     ###Saving the AIC table
+fwrite(Tab2, "Output/Table2.csv")     ###Saving the AIC table
 
 #table 5
-fwrite(OutAll, "Output/Table2.csv")
+fwrite(OutAll, "Output/TableA1.csv")
 
 
 #table 5: all models
 stargazer(Mods,
           type="html",
-          out="Output/Table2.html",
+          out="Output/TableA1.html",
           digits = 2,
           column.labels = c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full")
           # covariate.labels = c("Temp", "White", "N", "P", "Rank", "Temp*Rank", "White*Rank", "Temp*Rank", "N*Rank", "P*Rank", "N*Rank", "P*Rank"),
