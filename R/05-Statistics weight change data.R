@@ -172,17 +172,17 @@ AIC2<-AIC2 %>% mutate_if(is.numeric, round, digits=3)
 saveRDS(effsP, "Input/effects_pref.rds")
 
 
-#table 6
-fwrite(AIC, "Output/TableA2_2.csv")     ###Saving the AIC table
+#table 3
+fwrite(Tab3, "Output/Table3.csv")     ###Saving the AIC table
 
-#table 7
-fwrite(OutAll, "Output/Table3.csv")
+#table A2
+fwrite(OutAll, "Output/TableA2.csv")
                 
 
-#Another option for table 7
+#Another option for table A2
 stargazer(Mods,
           type="html",
-          out="Output/Table3.html",
+          out="Output/TableA2.html",
           digits = 2,
           column.labels = c("Null", "Base", "Temp", "Coat", "Energetic", "N", "P", "Nutrient", "Full"),
           float.env = "sidewaystable"
