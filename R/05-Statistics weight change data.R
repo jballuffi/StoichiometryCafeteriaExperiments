@@ -188,3 +188,6 @@ stargazer(Mods,
           float.env = "sidewaystable"
           # dep.var.labels = "Grams of Spruce Pile Consumed"
 )
+
+#table A4
+fwrite(AIC2, "Output/TableA4_2.csv")

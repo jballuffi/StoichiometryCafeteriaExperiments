@@ -219,3 +219,5 @@ stargazer(Mods,
           # dep.var.labels = "Grams of Spruce Pile Consumed"
 )
 
+#table A4
+fwrite(AIC2, "Output/TableA4.csv")
