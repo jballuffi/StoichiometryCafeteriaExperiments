@@ -1,0 +1,10 @@
+Modnames,Design,AICc,Delta_AICc,R2m,R2c
+Base,IR + Pref,353.009,0,0.11,0.11
+Coat,IR + Pref*Coat,356.606,3.597,0.12,0.12
+Energetic,IR + Pref*Temp + Pref*Coat,359.19,6.181,0.14,0.14
+Full,IR + Pref*Temp + Pref*Coat + Pref*N + Pref*P,366.954,13.945,0.16,0.16
+Nitrogen,IR + Pref*N,357.237,4.227,0.11,0.11
+Null,IR,356.661,3.651,0.03,0.03
+Nutrient,IR + Pref*N + Pref*P,359.657,6.648,0.13,0.13
+Phosphorus,IR + Pref*P,355.853,2.844,0.12,0.12
+Temp,IR + Pref*Temp,357.37,4.361,0.11,0.11
