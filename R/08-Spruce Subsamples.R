@@ -7,6 +7,20 @@ library(patchwork)
 Spruce<-as.data.table(read.csv("Input/Spruce_subsamples_2019.csv"))
 DTtraps<-readRDS("Input/all_trap_locs.rds")
 
+themeblank <- theme(axis.title = element_text(size=10),
+                    axis.text.x = element_text(size=8),
+                    axis.text.y = element_text(size=8),
+                    legend.key = element_blank(),
+                    panel.background = element_blank(),
+                    axis.line.y.left = element_line(color="black", size = .5),
+                    axis.line.x.bottom = element_line(color="black", size = .5),
+                    #panel.border = element_rect(colour = "black", fill=NA, size=1),
+                    legend.position = "right",
+                    legend.direction = "vertical",
+                    legend.text = element_text(size=9),
+                    legend.title = element_text(size=11))
+
+
 #set up spruce datatable
 Spruce$Pred_rank<-factor(Spruce$Pred_rank, levels=c("Low", "High"))  #set predicted rank with levels
 setnames(Spruce, "Total.N", "N")   #Changing names "old", "new"
@@ -50,45 +64,24 @@ C1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=C), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=C, colour=SampleLoc), size=4, width=.3)+
   scale_color_manual(values=LocCols, name="Site")+
-  labs(x="Predicted Quality", title="A) % Carbon")+
-  theme(axis.text=element_text(size=11, color="black"),
-        axis.title=element_blank(),
-        axis.title.y = element_blank(),
-        panel.background = element_blank(),
-        legend.key = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        panel.grid.minor.y=element_line(color="grey"),
-        panel.grid.major.y=element_line(color="grey"))
+  labs(x="Predicted Quality", subtitle = "(a) % Carbon")+
+  themeblank
 
 #NITROGEN
 N1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=N), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=N, colour=SampleLoc), size=4, width=.3)+
   scale_color_manual(values=LocCols, name="Site")+
-  labs(x="Predicted Quality", title="B) % Nitrogen")+
-  theme(axis.text=element_text(size=11, color="black"),
-        axis.title.x=element_text(size=16),
-        axis.title.y = element_blank(),
-        panel.background = element_blank(),
-        legend.key = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        panel.grid.minor.y=element_line(color="grey"),
-        panel.grid.major.y=element_line(color="grey"))
+  labs(x="Predicted Quality", subtitle = "(b) % Nitrogen")+
+  themeblank
 
 #PHOSPHORUS
 P1<-ggplot(Spruce)+
   geom_boxplot(aes(x=Pred_rank, y=P), stat="boxplot", outlier.shape = NA, alpha=1)+
   geom_jitter(aes(x=Pred_rank, y=P, colour=SampleLoc), size=4, width=.3)+
   scale_color_manual(values=LocCols, name="Site")+
-  labs(x="Predicted Quality", title="C) % Phosphorus")+
-  theme(axis.text=element_text(size=11, color="black"),
-        axis.title.x = element_blank(),
-        axis.title.y = element_blank(),
-        panel.background = element_blank(),
-        legend.key = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        panel.grid.minor.y=element_line(color="grey"),
-        panel.grid.major.y=element_line(color="grey"))
+  labs(x="Predicted Quality", subtitle = "(c) % Phosphorus")+
+  themeblank
 
 (CNP1<-(C1 + N1 + P1 + plot_layout(guides = 'collect')))
 
@@ -102,43 +95,22 @@ rankcols<- c("High"="grey70", "Low"="white")
 C2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=C, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
   scale_fill_manual(values=rankcols, name="Predicted Quality")+
-  labs(title="A) % Carbon")+
-  theme(axis.text=element_text(size=11, color="black"),
-        axis.title.y= element_blank(),
-        axis.title.x=element_blank(),
-        panel.background = element_blank(),
-        legend.key = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        panel.grid.minor.y=element_line(color="grey"),
-        panel.grid.major.y=element_line(color="grey"))
+  labs(subtitle="(a) % Carbon")+
+  themeblank
 
 #NITROGEN
 N2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=N, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
   scale_fill_manual(values=rankcols, name="Predicted Quality")+
-  labs(title="B) % Nitrogen")+
-  theme(axis.text=element_text(size=11, color="black"),
-        axis.title.y=element_blank(),
-        axis.title.x=element_blank(),
-        panel.background = element_blank(),
-        legend.key = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        panel.grid.minor.y=element_line(color="grey"),
-        panel.grid.major.y=element_line(color="grey"))
+  labs(subtitle="(b) % Nitrogen")+
+  themeblank
 
 #PHOSPHORUS
 P2<-ggplot(Full)+
   geom_boxplot(aes(x=Sampling, y=P, fill=Pred_rank), stat="boxplot", outlier.shape = NA, alpha=1)+
   scale_fill_manual(values=rankcols, name="Predicted Quality")+
-  labs(title="C) % Phosphorus")+
-  theme(axis.text=element_text(size=11, color="black"),
-        axis.title.y=element_blank(),
-        axis.title.x=element_blank(),
-        panel.background = element_blank(),
-        legend.key = element_blank(),
-        panel.border = element_rect(colour = "black", fill=NA, size=1),
-        panel.grid.minor.y=element_line(color="grey"),
-        panel.grid.major.y=element_line(color="grey"))
+  labs(subtitle="(c) % Phosphorus")+
+  themeblank
 
 (CNP2<-C2 + N2 + P2 + plot_layout(guides = 'collect'))
 
