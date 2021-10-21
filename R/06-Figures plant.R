@@ -20,12 +20,14 @@ gridP<-readRDS("Input/Bloomfield_P.rds")
 gridPSC<-readRDS("Input/Bloomfield_PSC.rds")
 
 #blanktheme
-themeblank <- theme(axis.title = element_text(size=14),
+themeblank <- theme(axis.title = element_text(size=10),
                     axis.text.x = element_text(size=8),
                     axis.text.y = element_text(size=8),
                     legend.key = element_blank(),
                     panel.background = element_blank(),
-                    panel.border = element_rect(colour = "black", fill=NA, size=1),
+                    axis.line.y.left = element_line(color="black", size = .5),
+                    axis.line.x.bottom = element_line(color="black", size = .5),
+                    #panel.border = element_rect(colour = "black", fill=NA, size=1),
                     legend.position = "right",
                     legend.direction = "vertical",
                     legend.text = element_text(size=9),
@@ -34,14 +36,21 @@ themeblank <- theme(axis.title = element_text(size=14),
 #### FIGURE A1 ####
 
 TrapShapes<-c("Sampled"=16, "Interpolated"=9, "Offered"=8)
-thememap <- theme(axis.text= element_blank(),
-                  axis.ticks = element_blank(),
-                  axis.title = element_blank(),
-                  panel.background = element_blank(),
-                  panel.border = element_blank(),
-                  legend.key.size = unit(.75, "line"),
+thememap <- theme(axis.title = element_blank(),
+                  axis.text.x = element_blank(),
+                  axis.text.y = element_blank(),
                   legend.key = element_blank(),
-                  legend.position = "right")
+                  panel.background = element_blank(),
+                  axis.line.y.left = element_blank(),
+                  axis.line.x.bottom = element_blank(),
+                  #panel.border = element_rect(colour = "black", fill=NA, size=1),
+                  legend.position = "right",
+                  legend.direction = "vertical",
+                  legend.text = element_text(size=9),
+                  legend.title = element_text(size=11))
+
+
+
 
 (Nmap<-ggplot(data=gridN) + 
     geom_raster(aes(x=x, y=y, fill=N))+
@@ -80,8 +89,8 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
     scale_shape_manual(values=TrapShapes2, name="Site Status   ")+
     scale_color_manual(values=qualcols, name="Quality Choice")+
     geom_abline(intercept = 0.01354, slope = 0.1256)+
-    geom_text(aes(.85, .2, label="y = 0.13x + 0.014"), size=4)+
-    geom_text(aes(.8, .19, label="R2 = 0.43"), size=4)+
+    geom_text(aes(.8, .2, label="y = 0.13x + 0.014"), size=3)+
+    geom_text(aes(.8, .19, label="R2 = 0.43"), size=3)+
     labs(y="% Phosphorus", x="% Nitrogen")+
     ggtitle("A")+
     themeblank)
@@ -91,8 +100,8 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
     scale_shape_manual(values=TrapShapes2, name="Site Status   ")+
     scale_color_manual(values=qualcols, name="Quality Choice")+
     geom_abline(intercept = 28.09, slope = -10.74)+
-    geom_text(aes(1.27, 30, label="y = -10.74x + 28.09"), size=4)+
-    geom_text(aes(1.27, 28, label="R2 = 0.17"), size=4)+
+    geom_text(aes(1.27, 30, label="y = -10.74x + 28.09"), size=3)+
+    geom_text(aes(1.27, 28, label="R2 = 0.17"), size=3)+
     labs(y="Terpene content (mg/g)", x="% Nitrogen")+
     ggtitle("B")+
     themeblank)
@@ -102,8 +111,8 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
     scale_shape_manual(values=TrapShapes2, name="Site Status   ")+
     scale_color_manual(values=qualcols, name="Quality Choice")+
     geom_abline(intercept = 21.93, slope = -33.61)+
-    geom_text(aes(.115, 31, label="y = -33.6x + 21.9"), size=4)+
-    geom_text(aes(.115, 29, label="R2 = 0.059"), size=4)+
+    geom_text(aes(.115, 31, label="y = -33.6x + 21.9"), size=3)+
+    geom_text(aes(.115, 29, label="R2 = 0.059"), size=3)+
     labs(y="Terpene content (mg/g)", x="% Phosphorus")+
     ggtitle("C")+
     themeblank)
@@ -117,39 +126,39 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
 
 (DBHN<-ggplot(data=DTtraps2)+
    geom_point(aes(y=N, x=AvgDBH), size = 3)+
-   geom_text(aes(5, 1.35, label="p = 0.36"), size=5)+
+   geom_text(aes(5, 1.35, label="p = 0.36"), size=3)+
    labs(x=NULL, y="% Nitrogen")+
    ggtitle("A")+
    themeblank)
 
 (CanopyN<-ggplot(data=DTtraps2)+
     geom_point(aes(y=N, x=CanopyClosure), size = 3)+
-    geom_abline(aes(intercept=.637, slope=.00336), size=1.2, colour="grey20")+
-    geom_text(aes(30, 1.35, label="y = 0.00336x + 0.637"), size=5)+
-    geom_text(aes(25, 1.25, label="t = 3.09, p < 0.01"), size=5)+
+    geom_abline(aes(intercept=.637, slope=.00336), size=1, colour="grey20")+
+    geom_text(aes(25, 1.35, label="y = 0.00336x + 0.637"), size=3)+
+    geom_text(aes(25, 1.25, label="t = 3.09, p < 0.01"), size=3)+
     labs(x=NULL, y=NULL)+
     ggtitle("B")+
     themeblank)
 
 (DBHP<-ggplot(data=DTtraps2)+
     geom_point(aes(y=P, x=AvgDBH), size = 3)+
-    geom_text(aes(5, .2, label="p = 0.69"), size=5)+
+    geom_text(aes(5, .2, label="p = 0.69"), size=3)+
     labs(x=NULL, y="% Phosphorus")+
     ggtitle("C")+
     themeblank)
 
 (CanopyP<-ggplot(data=DTtraps2)+
     geom_point(aes(y=P, x=CanopyClosure), size = 3)+
-    geom_abline(aes(intercept=0.098, slope=0.00068), size=1.2, colour="grey20")+
-    geom_text(aes(33, .2, label="y = 0.098x + 0.000682"), size=5)+
-    geom_text(aes(26, .185, label="t = 3.041, p < 0.01"), size=5)+
+    geom_abline(aes(intercept=0.098, slope=0.00068), size=1, colour="grey20")+
+    geom_text(aes(26, .2, label="y = 0.098x + 0.000682"), size=3)+
+    geom_text(aes(26, .185, label="t = 3.041, p < 0.01"), size=3)+
     labs(x=NULL, y=NULL)+
     ggtitle("D")+
     themeblank)
 
 (DBHC<-ggplot(data=DTtraps2)+
         geom_point(aes(y=TC, x=AvgDBH), size = 3)+
-        geom_text(aes(12, 51, label="p = 0.80"), size=5)+
+        geom_text(aes(12, 51, label="p = 0.80"), size=3)+
         labs(x=NULL, y="% Carbon")+
         ggtitle("E")+
         themeblank)
@@ -163,14 +172,14 @@ TrapShapes2<-c("Sampled"=16, "Offered"=8)
 
 (DBHPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=AvgDBH), size = 3)+
-    geom_text(aes(5, 30, label="p = 0.48"), size=5)+
+    geom_text(aes(5, 30, label="p = 0.48"), size=3)+
     labs(x="Mean DBH (cm)", y="PSC")+
     ggtitle("G")+
     themeblank)
 
 (CanopyPSC<-ggplot(data=DTtraps2)+
     geom_point(aes(y=PSC, x=CanopyClosure), size = 3)+
-    geom_text(aes(14, 30, label="p =0.11"), size=5)+
+    geom_text(aes(14, 30, label="p =0.11"), size=3)+
     labs(x="Canopy Closure (%)", y=NULL)+
     ggtitle("H")+
     themeblank)
